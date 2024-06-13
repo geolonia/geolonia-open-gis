@@ -9,8 +9,6 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-![](https://www.evernote.com/shard/s21/sh/21328125-91ab-4680-b3e2-3746c5f147d5/rXyJWuSyO7r1EF9CFdgYfNBkYNoW2UhfLpdkQW-RrxMjJBU9lS0NHbuW0Q/deep/0/image.png)
-
 Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
 
 == Description ==
