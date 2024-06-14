@@ -58,8 +58,16 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     const content = document.getElementById('content').value
     if (content) {
       const geojson = JSON.parse(content)
-      draw.add(geojson)
+      draw.set(geojson)
     }
+
+    document.getElementsByClassName('restore-backup')[0].addEventListener('click', () => {
+      const savedPostdata = window.wp.autosave.local.getSavedPostData()
+      if (savedPostdata && 'maps' === savedPostdata.post_type) {
+        document.getElementById('content').value = savedPostdata.content
+        draw.add(JSON.parse(document.getElementById('content').value))
+      }
+    }, true)
 
     document.getElementById('geolonia-get-latlng-button').addEventListener('click', () => {
       const lnglat = map.getCenter()
