@@ -66,8 +66,9 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       if (savedPostdata && 'maps' === savedPostdata.post_type) {
         document.getElementById('content').value = savedPostdata.content
         draw.add(JSON.parse(document.getElementById('content').value))
+        document.getElementById('title').focus() // WP に全選択されるので解除
       }
-    }, true)
+    })
 
     document.getElementById('geolonia-get-latlng-button').addEventListener('click', () => {
       const lnglat = map.getCenter()
