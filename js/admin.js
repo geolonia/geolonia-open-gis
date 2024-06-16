@@ -19,6 +19,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib' // as 'mapboxgl-ctrl-attrib'
 
   const draw = new MapboxDraw({
+    boxSelect: false,
     controls: {
       point: true,
       line_string: true,
@@ -31,14 +32,14 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     userProperties: true,
   });
 
+  const setGeoJSON = () => {
+    const geojson = draw.getAll()
+    document.getElementById('content').value = JSON.stringify(geojson)
+  }
+
   map.on('load', () => {
 
     map.addControl(draw, 'top-right')
-
-    const setGeoJSON = () => {
-      const geojson = draw.getAll()
-      document.getElementById('content').value = JSON.stringify(geojson)
-    }
 
     map.on('draw.create', (e) => {
       const featureId = e.features[0].id
@@ -87,16 +88,21 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       const colorArray =  AColorPicker.parseColor(color)
       colorArray.push(0.2)
 
-      draw.setFeatureProperty(current.featureId, 'marker-color', AColorPicker.parseColor(colorArray, 'rgbcss'))
-        .setFeatureProperty(current.featureId, 'stroke', AColorPicker.parseColor(colorArray, 'rgbcss'))
-        .setFeatureProperty(current.featureId, 'fill', AColorPicker.parseColor(colorArray, 'rgbacss'))
+      for (let i = 0; i < current.features.length; i++) {
+        const featureId = current.features[i].id
+        console.log(featureId)
+        draw.setFeatureProperty(featureId, 'marker-color', AColorPicker.parseColor(colorArray, 'rgbcss'))
+          .setFeatureProperty(featureId, 'stroke', AColorPicker.parseColor(colorArray, 'rgbcss'))
+          .setFeatureProperty(featureId, 'fill', AColorPicker.parseColor(colorArray, 'rgbacss'))
+      }
 
+      draw.set(draw.getAll())
       setGeoJSON()
     } )
 
     map.on('draw.selectionchange', (e) => {
       if (e.features.length && e.features[0].id) {
-        current.featureId = e.features[0].id
+        current.features = e.features
         colorPicker.show()
         colorPicker.setColor(e.features[0].properties.stroke, false)
       } else {
