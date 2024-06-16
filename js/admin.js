@@ -66,7 +66,10 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       if (savedPostdata && 'maps' === savedPostdata.post_type) {
         document.getElementById('content').value = savedPostdata.content
         draw.add(JSON.parse(document.getElementById('content').value))
+
         document.getElementById('title').focus() // WP に全選択されるので解除
+        draw.changeMode('draw_line_string') // スタイルを反映させるために一度モードを変更
+        draw.changeMode('simple_select') // さらに元に戻す
       }
     })
 
