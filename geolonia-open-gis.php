@@ -36,7 +36,7 @@ add_action( 'init', function() {
 		'hierarchical'          => false,
 		'show_ui'               => true,
 		'show_in_nav_menus'     => true,
-		'supports'              => array( 'title', 'editor', 'revisions' ),
+		'supports'              => array( 'title', 'editor', 'revisions', 'excerpt' ),
 		'has_archive'           => false,
 		'rewrite'               => array('slug' => 'maps'),
 		'query_var'             => true,
@@ -305,5 +305,15 @@ add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
 	}
 
 	return $response;
+
+}, 10, 3 );
+
+add_filter( 'gettext', function( $translation, $text, $domain ) {
+
+	if ( 'Word count: %s' === $text) {
+		$translation = '';
+	}
+
+	return $translation;
 
 }, 10, 3 );

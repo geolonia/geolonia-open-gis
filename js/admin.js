@@ -35,6 +35,12 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   const setGeoJSON = () => {
     const geojson = draw.getAll()
     document.getElementById('content').value = JSON.stringify(geojson)
+    setFeatureCount(geojson)
+  }
+
+  const setFeatureCount = (geojson) => {
+    const count = geojson.features.length
+    document.getElementById('wp-word-count').innerText = 'Count: ' + count
   }
 
   map.on('load', () => {
@@ -60,17 +66,19 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     if (content) {
       const geojson = JSON.parse(content)
       draw.set(geojson)
+      setFeatureCount(geojson)
     }
 
     document.getElementsByClassName('restore-backup')[0].addEventListener('click', () => {
       const savedPostdata = window.wp.autosave.local.getSavedPostData()
       if (savedPostdata && 'maps' === savedPostdata.post_type) {
-        document.getElementById('content').value = savedPostdata.content
-        draw.add(JSON.parse(document.getElementById('content').value))
+        draw.add(JSON.parse(savedPostdata.content))
 
         document.getElementById('title').focus() // WP に全選択されるので解除
         draw.changeMode('draw_line_string') // スタイルを反映させるために一度モードを変更
         draw.changeMode('simple_select') // さらに元に戻す
+
+        setGeoJSON()
       }
     })
 
@@ -110,5 +118,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         colorPicker.hide()
       }
     } )
+
+
   })
 }
