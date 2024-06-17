@@ -1,6 +1,6 @@
 const drawStyle = [
   {
-    'id': 'gl-draw-polygon-fill',
+    'id': 'gl-draw-polygon',
     'type': 'fill',
     'filter': ['all',
       ['==', '$type', 'Polygon'],
@@ -27,7 +27,7 @@ const drawStyle = [
     }
   },
   {
-    'id': 'gl-draw-polygon-and-line-vertex-stroke-inactive',
+    'id': 'gl-draw-polygon-and-line-vertex-stroke-active',
     'type': 'circle',
     'filter': ['all',
       ['==', 'meta', 'vertex'],
@@ -36,11 +36,11 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 7,
-      'circle-color': '#fff'
+      'circle-color': '#2271b1'
     }
   },
   {
-    'id': 'gl-draw-polygon-and-line-vertex-inactive',
+    'id': 'gl-draw-polygon-and-line-vertex-active',
     'type': 'circle',
     'filter': ['all',
       ['==', 'meta', 'vertex'],
@@ -49,7 +49,33 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 5,
-      'circle-color': '#555555'
+      'circle-color': '#fff'
+    }
+  },
+  {
+    'id': 'gl-draw-point-active-outline',
+    'type': 'circle',
+    'filter': ['all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'vertex'],
+      ['==', 'active', 'true'],
+    ],
+    'paint': {
+      'circle-radius': 13,
+      'circle-color': '#2271b1'
+    }
+  },
+  {
+    'id': 'gl-draw-point-active',
+    'type': 'circle',
+    'filter': ['all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'vertex'],
+      ['==', 'active', 'true'],
+    ],
+    'paint': {
+      'circle-radius': 11,
+      'circle-color': '#fff'
     }
   },
   {

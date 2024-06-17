@@ -159,7 +159,7 @@ add_action( 'wp_enqueue_scripts', function() {
 add_action( 'add_meta_boxes', function() {
 	add_meta_box(
 		'geolonia-gis-meta-center',
-		'座標',
+		'中心座標',
 		function() {
 			$lat = GEOLONIA_GIS_DEFAULT_LAT;
 			$lng = GEOLONIA_GIS_DEFAULT_LNG;
