@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name:     Geolonia Open GIS
- * Plugin URI:      PLUGIN SITE HERE
- * Description:     PLUGIN DESCRIPTION HERE
- * Author:          YOUR NAME HERE
- * Author URI:      YOUR SITE HERE
- * Text Domain:     geolonia-gis
+ * Plugin URI:      https://geolonia.com/
+ * Description:     Open GIS for WordPress
+ * Author:          Geolonia Inc.
+ * Author URI:      https://geolonia.com/
+ * Text Domain:     geolonia-open-gis
  * Domain Path:     /languages
  * Version:         0.1.0
  *
- * @package         Geolonia_Gis
+ * @package         Geolonia_Open_GIS
  */
 
 // Your code starts here.
@@ -20,6 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'GEOLONIA_GIS_POST_TYPE', 'maps' );
 
+if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
+	define( 'GEOLONIA_API_KEY', 'YOUR-API-KEY' );
+}
+
+if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
+	define( 'GEOLONIA_GIS_DEFAULT_STYLE', 'geolonia/gsi' );
+}
+
+// Registers the custom post type `maps`.
 add_action( 'init', function() {
 	register_post_type( 'maps', array(
 		'label'                 => 'Map',
@@ -57,6 +66,7 @@ add_filter( 'wp_editor_settings', function( $settings, $editor_id ) {
 	return $settings;
 }, 10, 2 );
 
+// Replaces the editor with the Geolonia GIS editor.
 add_filter( 'the_editor', function( $editor ) {
 	$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
@@ -146,6 +156,7 @@ add_action( 'admin_enqueue_scripts', function() {
 	);
 }, 20 );
 
+// Registers the Geolonia Embed API on the front end.
 add_action( 'wp_enqueue_scripts', function() {
 	wp_enqueue_script(
 		'geolonia-embed-api',
@@ -156,6 +167,7 @@ add_action( 'wp_enqueue_scripts', function() {
 	);
 }, 10 );
 
+// Registers the meta boxes on the admin screen.
 add_action( 'add_meta_boxes', function() {
 	add_meta_box(
 		'geolonia-gis-meta-center',
@@ -204,6 +216,7 @@ add_action( 'add_meta_boxes', function() {
 	);
 } );
 
+// Saves the latlng and the zoom as post meta.
 add_action( 'save_post', 'geolonia_gis_update_post', 10 );
 
 function geolonia_gis_update_post( $post_id ) {
@@ -243,6 +256,7 @@ function geolonia_gis_update_post( $post_id ) {
     }
 }
 
+// Filters the content and replaces it with the Geolonia GIS map.
 add_filter( 'the_content',	function( $content ) {
 	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
 		$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
@@ -282,3 +296,14 @@ add_filter( 'the_content',	function( $content ) {
 
 	return $content;
 } );
+
+// Filters the REST API response and replaces the content with the GeoJSON.
+add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
+
+	if ( ! post_password_required( $post ) ) {
+		$response->data['content']['rendered'] = json_decode($post->post_content);
+	}
+
+	return $response;
+
+}, 10, 3 );

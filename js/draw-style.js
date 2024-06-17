@@ -36,7 +36,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 7,
-      'circle-color': '#2271b1'
+      'circle-color': '#3bb2d0'
     }
   },
   {
@@ -62,7 +62,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 13,
-      'circle-color': '#2271b1'
+      'circle-color': '#3bb2d0'
     }
   },
   {
