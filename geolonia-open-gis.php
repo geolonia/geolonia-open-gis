@@ -70,7 +70,7 @@ add_filter( 'wp_editor_settings', function( $settings, $editor_id ) {
 add_filter( 'the_editor', function( $editor ) {
 	$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
-	if ( intval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
+	if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
 		$zoom = get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true);
 	}
 
@@ -201,7 +201,7 @@ add_action( 'add_meta_boxes', function() {
 		function() {
 			$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
-			if ( intval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
+			if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
 				$zoom = get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true);
 			}
 
@@ -245,7 +245,7 @@ function geolonia_gis_update_post( $post_id ) {
 			$nonce = $_POST['geolonia-gis-nonce-zoom'];
 
 			if ( wp_verify_nonce( $nonce, 'geolonia-gis-nonce-zoom' ) && isset( $_POST['geolonia-gis-zoom'] ) ) {
-				update_post_meta( $post_id, '_geolonia-gis-zoom', intval($_POST['geolonia-gis-zoom']) );
+				update_post_meta( $post_id, '_geolonia-gis-zoom', floatval($_POST['geolonia-gis-zoom']) );
 			}
 		}
 
@@ -261,7 +261,7 @@ add_filter( 'the_content',	function( $content ) {
 	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
 		$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
-		if ( intval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
+		if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
 			$zoom = get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true);
 		}
 

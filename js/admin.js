@@ -19,7 +19,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   MapboxDraw.constants.classes.ATTRIBUTION = 'maplibregl-ctrl-attrib' // as 'mapboxgl-ctrl-attrib'
 
   const draw = new MapboxDraw({
-    boxSelect: false,
     controls: {
       point: true,
       line_string: true,
