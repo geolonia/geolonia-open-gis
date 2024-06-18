@@ -9,7 +9,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   const map = new geolonia.Map(params)
 
   const colorPicker = AColorPicker.createPicker( '#color-picker' )
-  colorPicker.hide()
 
   const current = {}
 
@@ -40,6 +39,14 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   const setFeatureCount = (geojson) => {
     const count = geojson.features.length
     document.getElementById('wp-word-count').innerText = 'Count: ' + count
+  }
+
+  const toggleMetabox = (toggle) => {
+    if (true === toggle) {
+      document.getElementById('geojson-meta-container').style.display = 'flex'
+    } else {
+      document.getElementById('geojson-meta-container').style.display = 'none'
+    }
   }
 
   map.on('load', () => {
@@ -97,7 +104,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       for (let i = 0; i < current.features.length; i++) {
         const featureId = current.features[i].id
-        console.log(featureId)
         draw.setFeatureProperty(featureId, 'marker-color', AColorPicker.parseColor(colorArray, 'rgbcss'))
           .setFeatureProperty(featureId, 'stroke', AColorPicker.parseColor(colorArray, 'rgbcss'))
           .setFeatureProperty(featureId, 'fill', AColorPicker.parseColor(colorArray, 'rgbacss'))
@@ -105,19 +111,24 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       draw.set(draw.getAll())
       setGeoJSON()
-    } )
+    })
 
     map.on('draw.selectionchange', (e) => {
+      console.log(e)
       if (e.features.length && e.features[0].id) {
         current.features = e.features
-        colorPicker.show()
+        toggleMetabox(true)
         colorPicker.setColor(e.features[0].properties.stroke, false)
       } else {
         current.featureId = null
-        colorPicker.hide()
+        toggleMetabox(false)
       }
-    } )
+    })
 
+    map.on('draw.delete', () => {
+      current.featureId = null
+      toggleMetabox(false)
+    })
 
   })
 }

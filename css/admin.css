@@ -23,9 +23,45 @@
 	position: relative;
 }
 
-#color-picker
+#geojson-meta-container
 {
 	position: absolute;
-	bottom: 40px;
+	bottom: 8px;
 	left: 8px;
+	display: none;
+	padding: 16px;
+	background-color: rgba(255, 255, 255, 0.6);
+	border: 1px solid #CCCCCC;
+	border-radius: 8px;
+	z-index: 1000;
+}
+
+#geojson-meta
+{
+	margin-left: 16px;
+	width: 232px;
+	position: relative;
+}
+
+#geojson-meta input,
+#geojson-meta textarea
+{
+	width: 100%;
+	border: 1px solid #CCCCCC;
+}
+
+#geojson-meta textarea
+{
+	height: 170px;
+	position: absolute;
+	bottom: 0px;
+	left: 0;
+	resize: none;
+}
+
+#geojson-meta input::placeholder,
+#geojson-meta textarea::placeholder
+{
+	color: #000;
+	opacity: 0.4;
 }
