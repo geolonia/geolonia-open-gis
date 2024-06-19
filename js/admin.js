@@ -10,7 +10,11 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
   const colorPicker = AColorPicker.createPicker( '#color-picker' )
 
-  const current = {}
+  const current = {
+    features: [],
+    undo: [],
+    redo: [],
+  }
 
   MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl' // as 'mapboxgl-ctrl'
   MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-' // as 'mapboxgl-ctrl-'
@@ -32,8 +36,15 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
   const setGeoJSON = () => {
     const geojson = draw.getAll()
-    document.getElementById('content').value = JSON.stringify(geojson)
+
     setFeatureCount(geojson)
+
+    const last = current.undo[current.undo.length - 1]
+    if (JSON.stringify(geojson) !== JSON.stringify(last)) {
+      current.undo.push(geojson)
+    }
+
+    document.getElementById('content').value = JSON.stringify(geojson)
   }
 
   const setFeatureCount = (geojson) => {
@@ -55,6 +66,15 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
   map.on('load', () => {
 
+    // 地図の外側をクリックしたらすべての選択を外す
+    document.body.addEventListener('click', (e) => {
+      if (null === e.target.closest('#geolonia-gis-editor-container')) {
+        draw.changeMode('draw_point') // 一度モードを変更
+        draw.changeMode('simple_select', { featureIds: [] }) // 元に戻す
+        setGeoJSON()
+      }
+    })
+
     map.addControl(draw, 'top-right')
 
     map.on('draw.create', (e) => {
@@ -69,6 +89,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       setGeoJSON()
     });
+
     map.on('draw.delete', setGeoJSON);
     map.on('draw.update', setGeoJSON);
 
@@ -85,7 +106,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         draw.add(JSON.parse(savedPostdata.content))
 
         document.getElementById('title').focus() // WP に全選択されるので解除
-        draw.changeMode('draw_line_string') // スタイルを反映させるために一度モードを変更
+        draw.changeMode('draw_point') // スタイルを反映させるために一度モードを変更
         draw.changeMode('simple_select') // さらに元に戻す
 
         setGeoJSON()
@@ -114,7 +135,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       }
 
       draw.set(draw.getAll())
-      setGeoJSON()
     })
 
     map.on('draw.selectionchange', (e) => {
@@ -124,13 +144,15 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         colorPicker.setColor(e.features[0].properties.stroke, false)
         document.getElementById('geojson-meta-title').value = e.features[0].properties.title || ''
       } else {
-        current.featureId = null
+        current.features = []
         toggleMetabox(false)
       }
+
+      setGeoJSON()
     })
 
     map.on('draw.delete', () => {
-      current.featureId = null
+      current.features = []
       toggleMetabox(false)
     })
 
@@ -143,7 +165,38 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       }
 
       draw.set(draw.getAll())
-      setGeoJSON()
+    })
+
+    document.getElementById('geolonia-gis-editor-container').addEventListener('keydown', (e) => {
+      if ('z' === e.key && false === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) {
+        if (current.undo.length > 1) {
+          current.redo.push(current.undo.pop())
+          if (current.undo.length) {
+            const undo = current.undo.pop()
+            current.redo.push(undo)
+            draw.set(undo)
+
+            draw.changeMode('draw_point') // スタイルを反映させるために一度モードを変更
+            draw.changeMode('simple_select') // さらに元に戻す
+
+            setGeoJSON()
+          }
+        }
+      } else if ('z' === e.key && true === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) {
+        if (current.redo.length > 1) {
+          current.undo.push(current.redo.pop())
+          if (current.redo.length) {
+            const redo = current.redo.pop()
+            current.undo.push(redo)
+            draw.set(redo)
+
+            draw.changeMode('draw_point') // スタイルを反映させるために一度モードを変更
+            draw.changeMode('simple_select') // さらに元に戻す
+
+            setGeoJSON()
+          }
+        }
+      }
     })
 
   })
