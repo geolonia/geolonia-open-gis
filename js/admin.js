@@ -49,6 +49,11 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     }
   }
 
+  document.querySelector('#geolonia-gis-editor-container #geojson-meta-container .close').addEventListener('click', (e) => {
+    console.log(e)
+    toggleMetabox(false)
+  })
+
   map.on('load', () => {
 
     map.addControl(draw, 'top-right')
@@ -114,7 +119,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     })
 
     map.on('draw.selectionchange', (e) => {
-      console.log(e)
       if (e.features.length && e.features[0].id) {
         current.features = e.features
         toggleMetabox(true)

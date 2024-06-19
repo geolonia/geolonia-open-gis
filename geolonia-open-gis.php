@@ -102,6 +102,7 @@ add_filter( 'the_editor', function( $editor ) {
 				<div><input type="text" id="geojson-meta-title" name="geojson-meta-title" placeholder="タイトル"></div>
 				<div><textarea id="geojson-meta-description" name="geojson-meta-description" placeholder="説明文"></textarea></div>
 			</div>
+			<div class="close"></div>
 		</div>
 	</div>';
 } );
