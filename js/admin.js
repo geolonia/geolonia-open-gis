@@ -50,7 +50,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   }
 
   document.querySelector('#geolonia-gis-editor-container #geojson-meta-container .close').addEventListener('click', (e) => {
-    console.log(e)
     toggleMetabox(false)
   })
 
@@ -123,6 +122,8 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         current.features = e.features
         toggleMetabox(true)
         colorPicker.setColor(e.features[0].properties.stroke, false)
+        document.getElementById('geojson-meta-description').value = e.features[0].properties.description || ''
+        document.getElementById('geojson-meta-title').value = e.features[0].properties.title || ''
       } else {
         current.featureId = null
         toggleMetabox(false)
@@ -132,6 +133,30 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     map.on('draw.delete', () => {
       current.featureId = null
       toggleMetabox(false)
+    })
+
+    document.getElementById('geojson-meta-title').addEventListener('change', (e) => {
+      const title = e.target.value
+
+      for (let i = 0; i < current.features.length; i++) {
+        const featureId = current.features[i].id
+        draw.setFeatureProperty(featureId, 'title', title)
+      }
+
+      draw.set(draw.getAll())
+      setGeoJSON()
+    })
+
+    document.getElementById('geojson-meta-description').addEventListener('change', (e) => {
+      const description = e.target.value
+
+      for (let i = 0; i < current.features.length; i++) {
+        const featureId = current.features[i].id
+        draw.setFeatureProperty(featureId, 'description', description)
+      }
+
+      draw.set(draw.getAll())
+      setGeoJSON()
     })
 
   })
