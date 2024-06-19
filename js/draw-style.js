@@ -90,4 +90,72 @@ const drawStyle = [
       'circle-color': ['string', ['get', 'user_marker-color'], '#3bb2d0']
     }
   },
+  {
+    'id': 'gl-draw-polygon-symbol',
+    'type': 'symbol',
+    'filter': ['==', '$type', 'Polygon'],
+    'paint': {
+      'text-color': '#000',
+      'text-halo-color': '#fff',
+      'text-halo-width': 1,
+    },
+    'layout': {
+      'text-field': ['get', 'user_title'],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': 12,
+      'text-max-width': 12,
+      'text-allow-overlap': false,
+    },
+  },
+  {
+    'id': 'gl-draw-line-symbol',
+    'type': 'symbol',
+    'filter': ['==', '$type', 'LineString'],
+    'paint': {
+      'text-color': '#000',
+      'text-halo-color': '#fff',
+      'text-halo-width': 1,
+    },
+    'layout': {
+      'symbol-placement': 'line',
+      'text-field': ['get', 'user_title'],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': 12,
+      'text-max-width': 12,
+      'text-allow-overlap': false,
+    },
+  },
+  {
+    'id': 'gl-draw-point-symbol',
+    'type': 'symbol',
+    'filter': ['!', ['has', 'point_count']],
+    'paint': {
+      'text-color': '#000',
+      'text-halo-color': '#fff',
+      'text-halo-width': 1,
+    },
+    'layout': {
+      'icon-image': ['get', 'marker-symbol'],
+      'text-field': ['get', 'user_title'],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': 12,
+      'text-anchor': 'top',
+      'text-max-width': 12,
+      'text-offset': [
+        'case',
+        ['==', 'small', ['get', 'marker-size']], ['literal', [0, 0.6]],
+        ['==', 'large', ['get', 'marker-size']], ['literal', [0, 1.2]],
+        ['literal', [0, 0.8]],
+      ],
+      'text-allow-overlap': true,
+      'icon-allow-overlap': true,
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      'text-radial-offset': [
+        'case',
+        ['==', 'small', ['get', 'marker-size']], 0.6,
+        ['==', 'large', ['get', 'marker-size']], 1.3,
+        0.8,
+      ],
+    },
+  }
 ];

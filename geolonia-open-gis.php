@@ -97,11 +97,8 @@ add_filter( 'the_editor', function( $editor ) {
 		></div>
 		<textarea id="content" name="content" style="display: none;">%s</textarea>
 		<div id="geojson-meta-container">
-			<div id="color-picker" acp-color="#3bb2d0" acp-show-hsl="no" acp-show-hex="no" acp-show-rgb="no"></div>
-			<div id="geojson-meta">
-				<div><input type="text" id="geojson-meta-title" placeholder="タイトル"></div>
-				<div><textarea id="geojson-meta-description" placeholder="説明文"></textarea></div>
-			</div>
+			<div class="geojson-meta"><input type="text" id="geojson-meta-title" placeholder="タイトル"></div>
+			<div><div id="color-picker" acp-color="#3bb2d0" acp-show-hsl="no" acp-show-hex="no" acp-show-rgb="no"></div></div>
 			<div class="close"></div>
 		</div>
 	</div>';

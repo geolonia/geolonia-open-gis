@@ -54,32 +54,20 @@
 	cursor: pointer;
 }
 
-#geolonia-gis-editor-container #geojson-meta
+#geolonia-gis-editor-container .geojson-meta
 {
-	margin-left: 16px;
-	width: 232px;
-	position: relative;
+	width: 100%;
+	margin-bottom: 8px;
 }
 
-#geolonia-gis-editor-container #geojson-meta input,
-#geolonia-gis-editor-container #geojson-meta textarea
+#geolonia-gis-editor-container .geojson-meta input
 {
 	width: 100%;
 	border: 1px solid #CCCCCC;
-}
-
-#geolonia-gis-editor-container #geojson-meta textarea
-{
-	height: 170px;
-	position: absolute;
-	bottom: 0px;
-	left: 0;
-	resize: none;
-}
-
-#geolonia-gis-editor-container #geojson-meta input::placeholder,
-#geolonia-gis-editor-container #geojson-meta textarea::placeholder
-{
 	color: #000;
-	opacity: 0.4;
+}
+
+#geolonia-gis-editor-container .geojson-meta input::placeholder
+{
+	color: rgba(0, 0, 0, 0.4);
 }
