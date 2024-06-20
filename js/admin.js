@@ -167,6 +167,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         document.getElementById('geojson-meta-title').value = e.features[0].properties.title || ''
       } else {
         current.features = []
+        draw.changeMode('simple_select') // この行がないと何故か線を書くモードになってしまう
         toggleMetabox(false)
       }
 
