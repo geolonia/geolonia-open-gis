@@ -76,6 +76,7 @@ add_filter( 'the_editor', function( $editor ) {
 
 	$lat = GEOLONIA_GIS_DEFAULT_LAT;
 	$lng = GEOLONIA_GIS_DEFAULT_LNG;
+	$style = GEOLONIA_GIS_DEFAULT_STYLE;
 
 	if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) > 0 ) {
 		$lat = get_post_meta(get_the_ID(), '_geolonia-gis-lat', true);
@@ -85,8 +86,12 @@ add_filter( 'the_editor', function( $editor ) {
 		$lng = get_post_meta(get_the_ID(), '_geolonia-gis-lng', true);
 	}
 
+	if ( get_post_meta( get_the_ID(), '_geolonia-gis-style', true ) ) {
+		$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
+	}
+
 	return '<div id="geolonia-gis-editor-container"><div id="geolonia-map-editor"
-		data-style="' . esc_html( GEOLONIA_GIS_DEFAULT_STYLE ) . '"
+		data-style="' . esc_html( $style ) . '"
 		data-zoom="' . esc_html( $zoom ) . '"
 		data-lat="' . esc_html( $lat ) . '"
 		data-lng="' . esc_html( $lng ) . '"
@@ -191,8 +196,8 @@ add_action( 'add_meta_boxes', function() {
 
 			wp_nonce_field( 'geolonia-gis-nonce-latlng', 'geolonia-gis-nonce-latlng' );
 			?>
-				<p><input type="text" id="geolonia-gis-lat" name="geolonia-gis-lat" class="geolonia-meta" value="<?php echo esc_html($lat) ?>"></p>
-				<p><input type="text" id="geolonia-gis-lng" name="geolonia-gis-lng" class="geolonia-meta" value="<?php echo esc_html($lng) ?>"></p>
+				<p><input type="text" id="geolonia-gis-lat" name="geolonia-gis-lat" class="geolonia-meta" value="<?php echo esc_attr($lat) ?>"></p>
+				<p><input type="text" id="geolonia-gis-lng" name="geolonia-gis-lng" class="geolonia-meta" value="<?php echo esc_attr($lng) ?>"></p>
 				<p><button type="button" id="geolonia-get-latlng-button" class="geolonia-meta button">現在の座標を使用する</button></p>
 			<?php
 		},
@@ -212,8 +217,27 @@ add_action( 'add_meta_boxes', function() {
 
 			wp_nonce_field( 'geolonia-gis-nonce-zoom', 'geolonia-gis-nonce-zoom' );
 			?>
-				<p><input type="text" id="geolonia-gis-zoom" name="geolonia-gis-zoom" class="geolonia-meta" value="<?php echo esc_html($zoom) ?>"></p>
+				<p><input type="text" id="geolonia-gis-zoom" name="geolonia-gis-zoom" class="geolonia-meta" value="<?php echo esc_attr($zoom) ?>"></p>
 				<p><button type="button" id="geolonia-get-zoom-button" class="geolonia-meta button">現在のズームレベルを使用する</button></p>
+			<?php
+		},
+		GEOLONIA_GIS_POST_TYPE,
+		'side'
+	);
+
+	add_meta_box(
+		'geolonia-gis-meta-style',
+		'スタイル',
+		function() {
+			$style = GEOLONIA_GIS_DEFAULT_STYLE;
+
+			if ( get_post_meta( get_the_ID(), '_geolonia-gis-style', true ) ) {
+				$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
+			}
+
+			wp_nonce_field( 'geolonia-gis-nonce-style', 'geolonia-gis-nonce-style' );
+			?>
+				<p><input type="text" id="geolonia-gis-style" name="geolonia-gis-style" class="geolonia-meta" value="<?php echo esc_attr($style) ?>"></p>
 			<?php
 		},
 		GEOLONIA_GIS_POST_TYPE,
@@ -254,6 +278,14 @@ function geolonia_gis_update_post( $post_id ) {
 			}
 		}
 
+		if ( isset( $_POST['geolonia-gis-nonce-style'] ) ) {
+			$nonce = $_POST['geolonia-gis-nonce-style'];
+
+			if ( wp_verify_nonce( $nonce, 'geolonia-gis-nonce-style' ) && isset( $_POST['geolonia-gis-style'] ) ) {
+				update_post_meta( $post_id, '_geolonia-gis-style', trim( $_POST['geolonia-gis-style'] ) );
+			}
+		}
+
         // re-hook this function
         add_action( 'save_post', 'geolonia_gis_update_post' );
 
@@ -272,6 +304,7 @@ add_filter( 'the_content',	function( $content ) {
 
 		$lat = GEOLONIA_GIS_DEFAULT_LAT;
 		$lng = GEOLONIA_GIS_DEFAULT_LNG;
+		$style = GEOLONIA_GIS_DEFAULT_STYLE;
 
 		if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) > 0 ) {
 			$lat = get_post_meta(get_the_ID(), '_geolonia-gis-lat', true);
@@ -281,8 +314,13 @@ add_filter( 'the_content',	function( $content ) {
 			$lng = get_post_meta(get_the_ID(), '_geolonia-gis-lng', true);
 		}
 
+		if ( get_post_meta( get_the_ID(), '_geolonia-gis-style', true ) ) {
+			$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
+		}
+
 		$content = sprintf( '<script id="geojson-%s" type="application/json">%s</script>
 			<div class="geolonia"
+				data-style="%s"
 				data-geojson="#geojson-%s"
 				data-lat="%s"
 				data-lng="%s"
@@ -291,12 +329,13 @@ add_filter( 'the_content',	function( $content ) {
 				data-hash="on"
 				data-gesture-handling="off"
 				style="min-height: 300px; width: 100%%;"></div>',
-			esc_html( get_the_ID() ),
+			esc_attr( get_the_ID() ),
 			json_encode( json_decode( get_the_content() ) ),
-			esc_html( get_the_ID() ),
-			esc_html( $lat ),
-			esc_html( $lng ),
-			esc_html( $zoom ) );
+			esc_attr( $style ),
+			esc_attr( get_the_ID() ),
+			esc_attr( $lat ),
+			esc_attr( $lng ),
+			esc_attr( $zoom ) );
 	}
 
 	return $content;
