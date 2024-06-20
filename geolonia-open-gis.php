@@ -91,10 +91,10 @@ add_filter( 'the_editor', function( $editor ) {
 	}
 
 	return '<div id="geolonia-gis-editor-container"><div id="geolonia-map-editor"
-		data-style="' . esc_html( $style ) . '"
-		data-zoom="' . esc_html( $zoom ) . '"
-		data-lat="' . esc_html( $lat ) . '"
-		data-lng="' . esc_html( $lng ) . '"
+		data-style="' . esc_attr( $style ) . '"
+		data-zoom="' . esc_attr( $zoom ) . '"
+		data-lat="' . esc_attr( $lat ) . '"
+		data-lng="' . esc_attr( $lng ) . '"
 		data-marker="off"
 		data-lazy-loading="off"
 		data-geolocate-control="on"
