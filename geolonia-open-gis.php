@@ -82,11 +82,11 @@ add_filter( 'the_editor', function( $editor ) {
 	$lng = GEOLONIA_GIS_DEFAULT_LNG;
 	$style = GEOLONIA_GIS_DEFAULT_STYLE;
 
-	if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) > 0 ) {
+	if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) ) {
 		$lat = get_post_meta(get_the_ID(), '_geolonia-gis-lat', true);
 	}
 
-	if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) > 0 ) {
+	if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) ) {
 		$lng = get_post_meta(get_the_ID(), '_geolonia-gis-lng', true);
 	}
 
@@ -194,11 +194,11 @@ add_action( 'add_meta_boxes', function() {
 			$lat = GEOLONIA_GIS_DEFAULT_LAT;
 			$lng = GEOLONIA_GIS_DEFAULT_LNG;
 
-			if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) > 0 ) {
+			if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) ) {
 				$lat = get_post_meta(get_the_ID(), '_geolonia-gis-lat', true);
 			}
 
-			if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) > 0 ) {
+			if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) ) {
 				$lng = get_post_meta(get_the_ID(), '_geolonia-gis-lng', true);
 			}
 
@@ -273,8 +273,10 @@ function geolonia_gis_update_post( $post_id ) {
 			$nonce = $_POST['geolonia-gis-nonce-latlng'];
 
 			if ( wp_verify_nonce( $nonce, 'geolonia-gis-nonce-latlng' ) && isset( $_POST['geolonia-gis-lat'] ) && isset( $_POST['geolonia-gis-lng'] ) ) {
-				update_post_meta( $post_id, '_geolonia-gis-lat', floatval($_POST['geolonia-gis-lat']) );
-				update_post_meta( $post_id, '_geolonia-gis-lng', floatval($_POST['geolonia-gis-lng']) );
+				if ( is_numeric( $_POST['geolonia-gis-lat'] ) && is_numeric( $_POST['geolonia-gis-lng'] ) ) {
+					update_post_meta( $post_id, '_geolonia-gis-lat', $_POST['geolonia-gis-lat'] );
+					update_post_meta( $post_id, '_geolonia-gis-lng', $_POST['geolonia-gis-lng'] );
+				}
 			}
 		}
 
@@ -314,11 +316,11 @@ add_filter( 'the_content',	function( $content ) {
 		$lng = GEOLONIA_GIS_DEFAULT_LNG;
 		$style = GEOLONIA_GIS_DEFAULT_STYLE;
 
-		if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) > 0 ) {
+		if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lat', true ) ) ) {
 			$lat = get_post_meta(get_the_ID(), '_geolonia-gis-lat', true);
 		}
 
-		if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) > 0 ) {
+		if ( is_numeric( get_post_meta(get_the_ID(), '_geolonia-gis-lng', true) ) ) {
 			$lng = get_post_meta(get_the_ID(), '_geolonia-gis-lng', true);
 		}
 

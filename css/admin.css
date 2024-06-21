@@ -30,14 +30,15 @@
 	border-bottom: none;
 	z-index: 9999;
 	position: absolute;
-	top: 0;
+	top: -1px;
 	left: 0;
-	bottom: 0;
+	bottom: -1px;
 	right: 0;
 	resize: none;
 	outline: none;
 	box-shadow: none;
 	font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 .geolonia-meta
