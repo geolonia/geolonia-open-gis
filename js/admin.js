@@ -144,7 +144,8 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       const savedPostdata = window.wp.autosave.local.getSavedPostData()
       if (savedPostdata && 'maps' === savedPostdata.post_type) {
         document.getElementById('title').value = savedPostdata.post_title
-        draw.add(JSON.parse(savedPostdata.content))
+        draw.set(JSON.parse(savedPostdata.content))
+        document.getElementById('geolonia-geojson-editor').value = JSON.stringify(JSON.parse(savedPostdata.content), null, 2)
 
         setGeoJSON()
 
@@ -223,6 +224,18 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       if ('Enter' === e.key) {
         handleTitleChange(e)
         e.preventDefault()
+      }
+    })
+
+    document.getElementById('geolonia-geojson-editor').addEventListener('change', (e) => {
+      const content = e.target.value
+      try {
+        const geojson = JSON.parse(content)
+        draw.set(geojson)
+        current.undo.push(geojson)
+        setFeatureCount(geojson)
+        setGeoJSON()
+      } catch (e) {
       }
     })
 
