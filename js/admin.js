@@ -180,7 +180,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     })
 
     // 各地物のタイトルを GeoJson にセット
-    document.getElementById('geojson-meta-title').addEventListener('change', (e) => {
+    const handleTitleChange = (e) => {
       const title = e.target.value
 
       for (let i = 0; i < current.features.length; i++) {
@@ -190,10 +190,12 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       draw.set(draw.getAll())
       setGeoJSON()
-    })
+    }
 
+    document.getElementById('geojson-meta-title').addEventListener('change', handleTitleChange)
     document.getElementById('geojson-meta-title').addEventListener('keydown', (e) => {
       if ('Enter' === e.key) {
+        handleTitleChange(e)
         e.preventDefault()
       }
     })
@@ -236,10 +238,11 @@ if (document.getElementById('geolonia-gis-editor-container')) {
         if (current.features.length) {
           for (let i = 0; i < current.features.length; i++) {
             draw.delete(current.features[i].id)
-            toggleMetabox(false)
-            current.features = []
-            setGeoJSON()
           }
+
+          toggleMetabox(false)
+          current.features = []
+          setGeoJSON()
         }
       }
     })
