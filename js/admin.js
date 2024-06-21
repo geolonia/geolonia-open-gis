@@ -220,6 +220,8 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     }
 
     document.getElementById('geojson-meta-title').addEventListener('change', handleTitleChange)
+
+    // タイトルの入力欄で Enter キーを押した際にタイトルをセットしてその後のイベントをキャンセル
     document.getElementById('geojson-meta-title').addEventListener('keydown', (e) => {
       if ('Enter' === e.key) {
         handleTitleChange(e)
@@ -227,12 +229,12 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       }
     })
 
+    // GeoJSON エディタの内容を地図及び `#content` に反映
     document.getElementById('geolonia-geojson-editor').addEventListener('change', (e) => {
       const content = e.target.value
       try {
         const geojson = JSON.parse(content)
         draw.set(geojson)
-        current.undo.push(geojson)
         setFeatureCount(geojson)
         setGeoJSON()
       } catch (e) {
