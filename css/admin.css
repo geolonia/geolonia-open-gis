@@ -3,13 +3,41 @@
 	width: 100%;
 }
 
-#geolonia-map-editor
+#geolonia-gis-editor-container .editor-container
 {
-	width: calc(100% - 2px);
-	height: calc(100vh - 300px);
+	width: 100%;
+	height: calc(100vh - 400px);
 	min-height: 200px;
+	position: relative;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-map-editor
+{
 	border: 1px solid #CCCCCC;
 	border-bottom: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-geojson-editor
+{
+	border: 1px solid #CCCCCC;
+	box-sizing: border-box;
+	border-radius: 0;
+	border-bottom: none;
+	z-index: 9999;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	resize: none;
+	outline: none;
+	box-shadow: none;
+	font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
 }
 
 .geolonia-meta
@@ -70,4 +98,27 @@
 #geolonia-gis-editor-container .geojson-meta input::placeholder
 {
 	color: rgba(0, 0, 0, 0.4);
+}
+
+#geolonia-gis-editor-container .editor-menu
+{
+	text-align: right;
+}
+
+#geolonia-gis-editor-container .editor-menu button
+{
+	background-color: #F4F5F5;
+	color: #000000;
+	border: 1px solid #CCCCCC;
+	border-bottom: none;
+	padding: 4px;
+	width: 100px;
+	margin-left: 4px;
+}
+
+#geolonia-gis-editor-container .editor-menu .inactive
+{
+	background-color: #ECECED;
+	color: #666666;
+	cursor: pointer;
 }

@@ -1,20 +1,19 @@
 if (document.getElementById('geolonia-gis-editor-container')) {
 
-  const params = {
-    container: 'geolonia-map-editor',
-  }
 
   const defaultColor = '#3bb2d0'
-
-  const map = new geolonia.Map(params)
-
-  const colorPicker = AColorPicker.createPicker( '#color-picker' )
 
   const current = {
     features: [],
     undo: [],
     redo: [],
   }
+
+  const map = new geolonia.Map({
+    container: 'geolonia-map-editor',
+  })
+
+  const colorPicker = AColorPicker.createPicker( '#color-picker' )
 
   MapboxDraw.constants.classes.CONTROL_BASE = 'maplibregl-ctrl' // as 'mapboxgl-ctrl'
   MapboxDraw.constants.classes.CONTROL_PREFIX = 'maplibregl-ctrl-' // as 'mapboxgl-ctrl-'
@@ -34,6 +33,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     userProperties: true,
   });
 
+  // GeoJSON エディタの内容をWP用のコンテンツとしてセットする
   const setGeoJSON = () => {
     const geojson = draw.getAll()
 
@@ -47,11 +47,13 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     document.getElementById('content').value = JSON.stringify(geojson)
   }
 
+  // 地物の数をエディターの下に表示
   const setFeatureCount = (geojson) => {
     const count = geojson.features.length
     document.getElementById('wp-word-count').innerText = 'Count: ' + count
   }
 
+  // カラーピッカー及びタイトル用のメタボックスの表示/非表示
   const toggleMetabox = (toggle) => {
     if (true === toggle) {
       document.getElementById('geojson-meta-container').style.display = 'block'
@@ -60,15 +62,39 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     }
   }
 
+  // カラーピッカー及びタイトル用のメタボックスの閉じるボタン
   document.querySelector('#geolonia-gis-editor-container #geojson-meta-container .close').addEventListener('click', (e) => {
     toggleMetabox(false)
+  })
+
+  // Map 及び GeoJSON エディタの切り替え
+  const editorMenus = document.querySelectorAll('#geolonia-gis-editor-container .editor-menu button')
+  editorMenus.forEach((menu) => {
+    menu.addEventListener('click', (e) => {
+      if ('inactive' === e.target.className) {
+        editorMenus.forEach((menu) => {
+          menu.className = 'inactive'
+        })
+        e.target.className = 'active'
+      }
+
+      if ('map' === e.target.dataset.editor) {
+        document.getElementById('geolonia-geojson-editor').style.display = 'none'
+      } else if ('geojson' === e.target.dataset.editor) {
+        document.getElementById('geolonia-geojson-editor').style.display = 'block'
+
+        const content = document.getElementById('content').value
+        const geojson = JSON.stringify(JSON.parse(content), null, 2)
+        document.getElementById('geolonia-geojson-editor').value = geojson
+      }
+    })
   })
 
   map.on('load', () => {
 
     // 地図の外側をクリックしたらすべての選択を外す
     document.body.addEventListener('click', (e) => {
-      if (null === e.target.closest('#geolonia-gis-editor-container')) {
+      if (null === e.target.closest('#geolonia-gis-editor-container .editor-container')) {
         draw.changeMode('draw_point') // 一度モードを変更
         draw.changeMode('simple_select', { featureIds: [] }) // 元に戻す
         setGeoJSON()
@@ -201,7 +227,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     })
 
     // Undo / Redo
-    document.getElementById('geolonia-gis-editor-container').addEventListener('keydown', (e) => {
+    document.getElementById('geolonia-map-editor').addEventListener('keydown', (e) => {
       if ('z' === e.key && false === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) {
         if (current.undo.length > 1) {
           current.redo.push(current.undo.pop())

@@ -68,6 +68,10 @@ add_filter( 'wp_editor_settings', function( $settings, $editor_id ) {
 
 // Replaces the editor with the Geolonia GIS editor.
 add_filter( 'the_editor', function( $editor ) {
+	if ( GEOLONIA_GIS_POST_TYPE !== get_post_type() ) {
+		return $editor;
+	}
+
 	$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
 	if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
@@ -90,7 +94,10 @@ add_filter( 'the_editor', function( $editor ) {
 		$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
 	}
 
-	return '<div id="geolonia-gis-editor-container"><div id="geolonia-map-editor"
+	return '<div id="geolonia-gis-editor-container">
+	<div class="editor-menu"><button type="button" data-editor="map" class="active">MAP</button><button type="button" data-editor="geojson" class="inactive">GeoJSON</button></div>
+	<div class="editor-container">
+	<div id="geolonia-map-editor"
 		data-style="' . esc_attr( $style ) . '"
 		data-zoom="' . esc_attr( $zoom ) . '"
 		data-lat="' . esc_attr( $lat ) . '"
@@ -100,12 +107,13 @@ add_filter( 'the_editor', function( $editor ) {
 		data-geolocate-control="on"
 		data-gesture-handling="off"
 		></div>
-		<textarea id="content" name="content" style="display: none;">%s</textarea>
 		<div id="geojson-meta-container">
 			<div class="geojson-meta"><input type="text" id="geojson-meta-title" placeholder="タイトル"></div>
 			<div><div id="color-picker" acp-color="#3bb2d0" acp-show-hsl="no" acp-show-hex="no" acp-show-rgb="no"></div></div>
 			<div class="close"></div>
 		</div>
+		<textarea id="geolonia-geojson-editor" spellcheck="false" style="display: none;"></textarea>
+		<textarea id="content" name="content" style="display: none;">%s</textarea></div>
 	</div>';
 } );
 
