@@ -33,20 +33,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     userProperties: true,
   });
 
-  // GeoJSON エディタの内容をWP用のコンテンツとしてセットする
-  const setGeoJSON = () => {
-    const geojson = draw.getAll()
-
-    setFeatureCount(geojson)
-
-    const last = current.undo[current.undo.length - 1]
-    if (JSON.stringify(geojson) !== JSON.stringify(last)) {
-      current.undo.push(geojson)
-    }
-
-    document.getElementById('content').value = JSON.stringify(geojson)
-  }
-
   // 地物の数をエディターの下に表示
   const setFeatureCount = (geojson) => {
     const count = geojson.features.length
@@ -92,15 +78,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
   map.on('load', () => {
 
-    // 地図の外側をクリックしたらすべての選択を外す
-    document.body.addEventListener('click', (e) => {
-      if (null === e.target.closest('#geolonia-gis-editor-container .editor-container')) {
-        draw.changeMode('draw_point') // 一度モードを変更
-        draw.changeMode('simple_select', { featureIds: [] }) // 元に戻す
-        setGeoJSON()
-      }
-    })
-
     map.addControl(draw, 'top-right') // draw の各種コントロールを追加
 
     // デフォルトの GeoJSON をセット
@@ -121,6 +98,29 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       current.undo.push(geojson)
       setFeatureCount(geojson)
     }
+
+    // GeoJSON エディタの内容をWP用のコンテンツとしてセットする
+    const setGeoJSON = () => {
+      const geojson = draw.getAll()
+
+      setFeatureCount(geojson)
+
+      const last = current.undo[current.undo.length - 1]
+      if (JSON.stringify(geojson) !== JSON.stringify(last)) {
+        current.undo.push(geojson)
+      }
+
+      document.getElementById('content').value = JSON.stringify(geojson)
+    }
+
+    // 地図の外側をクリックしたらすべての選択を外す
+    document.body.addEventListener('click', (e) => {
+      if (null === e.target.closest('#geolonia-gis-editor-container .editor-container')) {
+        draw.changeMode('draw_point') // 一度モードを変更
+        draw.changeMode('simple_select', { featureIds: [] }) // 元に戻す
+        setGeoJSON()
+      }
+    })
 
     // 地物を新しく追加した際の処理
     map.on('draw.create', (e) => {
@@ -206,10 +206,11 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       toggleMetabox(false)
     })
 
-    // 各地物のタイトルを GeoJson にセット
+    // 各地物のタイトルを GeoJson にセットするためのコールバック
     const handleTitleChange = (e) => {
       const title = e.target.value
 
+      // 複数選択があり得るのでループ
       for (let i = 0; i < current.features.length; i++) {
         const featureId = current.features[i].id
         draw.setFeatureProperty(featureId, 'title', title)
@@ -243,7 +244,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
     // Undo / Redo
     document.getElementById('geolonia-map-editor').addEventListener('keydown', (e) => {
-      if ('z' === e.key && false === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) {
+      if ('z' === e.key && false === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) { // Cmd + z Undo
         if (current.undo.length > 1) {
           current.redo.push(current.undo.pop())
           if (current.undo.length) {
@@ -259,7 +260,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
             setGeoJSON()
           }
         }
-      } else if ('z' === e.key && true === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) {
+      } else if ('z' === e.key && true === e.shiftKey && (true === e.metaKey || true === e.ctrlKey)) { // Cmd + Shift + z Redo
         if (current.redo.length > 1) {
           current.undo.push(current.redo.pop())
           if (current.redo.length) {
@@ -275,7 +276,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
             setGeoJSON()
           }
         }
-      } else if ('Backspace' === e.key && ! e.target.closest('input, textarea')) {
+      } else if ('Backspace' === e.key && ! e.target.closest('input, textarea')) { // Backspace Delete
         if (current.features.length) {
           for (let i = 0; i < current.features.length; i++) {
             draw.delete(current.features[i].id)
@@ -288,5 +289,5 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       }
     })
 
-  })
+  }) // End of `map.on('load')`
 }
