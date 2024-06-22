@@ -14,12 +14,6 @@
 
 // Your code starts here.
 
-if ( ! function_exists( 'populate_roles' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/schema.php' );
-}
-
-populate_roles(); // roles & capabilities を初期化
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Invalid request.' );
 }
@@ -48,13 +42,13 @@ register_activation_hook( __FILE__, function() {
 		'edit_post' 			=> 'edit_map',
 		'delete_post' 			=> 'delete_map',
 		'read_post' 			=> 'read_map',
-		'manage_terms' 			=> 'manage_post_tags',
-		'edit_terms' 			=> 'edit_post_tags',
-		'delete_terms' 			=> 'delete_post_tags',
-		'assign_terms' 			=> 'assign_post_tags',
+		'manage_terms'          => 'manage_map_tag',
+		'edit_terms'            => 'edit_map_tag',
+		'delete_terms'          => 'delete_map_tag',
+		'assign_terms'          => 'assign_map_tag',
 	);
 
-    foreach ( $capabilities as $cap ) {
+    foreach ( array_values( $capabilities ) as $cap ) {
         $administrator->add_cap( $cap );
     }
 
@@ -70,13 +64,13 @@ register_activation_hook( __FILE__, function() {
 		'edit_post' 			=> 'edit_map',
 		'delete_post' 			=> 'delete_map',
 		'read_post' 			=> 'read_map',
-		'manage_terms' 			=> 'manage_post_tags',
-		'edit_terms' 			=> 'edit_post_tags',
-		'delete_terms' 			=> 'delete_post_tags',
-		'assign_terms' 			=> 'assign_post_tags',
+		'manage_terms'          => 'manage_map_tag',
+		'edit_terms'            => 'edit_map_tag',
+		'delete_terms'          => 'delete_map_tag',
+		'assign_terms'          => 'assign_map_tag',
 	);
 
-    foreach ( $capabilities as $cap ) {
+    foreach ( array_values( $capabilities ) as $cap ) {
         $editor->add_cap( $cap );
     }
 
@@ -92,13 +86,13 @@ register_activation_hook( __FILE__, function() {
 		'edit_post' 			=> 'edit_map',
 		'delete_post' 			=> 'delete_map',
 		'read_post' 			=> 'read_map',
-		// 'manage_terms' 			=> 'manage_post_tags',
-		// 'edit_terms' 			=> 'edit_post_tags',
-		// 'delete_terms' 			=> 'delete_post_tags',
-		'assign_terms' 			=> 'assign_post_tags',
+		// 'manage_terms'          => 'manage_map_tag',
+		// 'edit_terms'            => 'edit_map_tag',
+		// 'delete_terms'          => 'delete_map_tag',
+		'assign_terms'          => 'assign_map_tag',
 	);
 
-    foreach ( $capabilities as $cap ) {
+    foreach ( array_values( $capabilities ) as $cap ) {
         $author->add_cap( $cap );
     }
 
@@ -114,13 +108,13 @@ register_activation_hook( __FILE__, function() {
 		'edit_post' 			=> 'edit_map',
 		'delete_post' 			=> 'delete_map',
 		'read_post' 			=> 'read_map',
-		// 'manage_terms' 			=> 'manage_post_tags',
-		// 'edit_terms' 			=> 'edit_post_tags',
-		// 'delete_terms' 			=> 'delete_post_tags',
-		'assign_terms' 			=> 'assign_post_tags',
+		// 'manage_terms'          => 'manage_map_tag',
+		// 'edit_terms'            => 'edit_map_tag',
+		// 'delete_terms'          => 'delete_map_tag',
+		'assign_terms'          => 'assign_map_tag',
 	);
 
-    foreach ( $capabilities as $cap ) {
+    foreach ( array_values( $capabilities ) as $cap ) {
         $contributor->add_cap( $cap );
     }
 
@@ -138,7 +132,7 @@ register_activation_hook( __FILE__, function() {
 		'read_post' 			=> 'read_map',
 	);
 
-    foreach ( $capabilities as $cap ) {
+    foreach ( array_values( $capabilities ) as $cap ) {
         $subscriber->add_cap( $cap );
     }
 
@@ -174,11 +168,27 @@ add_action( 'init', function() {
 		'show_in_rest'          => true,
 		'rest_base'             => GEOLONIA_GIS_POST_TYPE,
 		'rest_controller_class' => 'WP_REST_Posts_Controller',
-		'taxonomies' 			=> array( 'post_tag' ),
+		'taxonomies' 			=> array( 'map_tag' ),
         'capability_type' 		=> 'map',
         'capabilities' 			=> $capabilities,
 	) );
 
+	register_taxonomy(
+		'map-tag',
+		'maps',
+		array(
+			'label' => 'タグ',
+			'hierarchical' => false,
+			'public' => true,
+			'show_in_rest' => true,
+			'capabilities' => array(
+				'manage_terms' => 'manage_map_tag',
+				'edit_terms' => 'edit_map_tag',
+				'delete_terms' => 'delete_map_tag',
+				'assign_terms' => 'assign_map_tag',
+			),
+		)
+	);
 } );
 
 // Disable Gutenberg on the back end.
