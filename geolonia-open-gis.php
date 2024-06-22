@@ -14,6 +14,11 @@
 
 // Your code starts here.
 
+if ( ! function_exists( 'populate_roles' ) ) {
+	require_once( ABSPATH . 'wp-admin/includes/schema.php' );
+}
+
+populate_roles(); // roles & capabilities を初期化
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Invalid request.' );
@@ -173,6 +178,7 @@ add_action( 'init', function() {
         'capability_type' 		=> 'map',
         'capabilities' 			=> $capabilities,
 	) );
+
 } );
 
 // Disable Gutenberg on the back end.
