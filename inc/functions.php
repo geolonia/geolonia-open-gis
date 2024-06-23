@@ -70,8 +70,4 @@ function define_map_caps() {
 			$role->add_cap( $cap );
 		}
 	}
-
-	// `author` 公開済みの地図の編集を許可
-	// $author = get_role( 'author' );
-	// $author->add_cap( 'edit_published_maps' );
 }
