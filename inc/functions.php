@@ -6,18 +6,6 @@
  */
 function register_post_type_maps() {
 
-	// $capabilities = array(
-	// 	'publish_posts' 		=> 'publish_maps',
-	// 	'edit_posts' 			=> 'edit_maps',
-	// 	'edit_others_posts' 	=> 'edit_others_maps',
-	// 	'delete_posts' 			=> 'delete_maps',
-	// 	'delete_others_posts' 	=> 'delete_others_maps',
-	// 	'read_private_posts' 	=> 'read_private_maps',
-	// 	'edit_post' 			=> 'edit_map',
-	// 	'delete_post' 			=> 'delete_map',
-	// 	'read_post' 			=> 'read_map',
-	// );
-
 	register_post_type( 'maps', array(
 		'label'                 => 'Map',
 		'public'                => true,
@@ -35,37 +23,10 @@ function register_post_type_maps() {
 		'taxonomies' 			=> array( 'map_tag' ),
         'capability_type' 		=> array( 'map', 'maps' ),
 		'map_meta_cap' 			=> true
-// 		'capabilities' 			=> array(
-// // delete_others_posts
-// // delete_posts
-// // delete_private_posts
-// // delete_published_posts
-// // edit_others_posts
-// // edit_posts
-// // edit_private_posts
-// // edit_published_posts
-// // manage_categories
-// // moderate_comments
-// // publish_posts
-// // read_private_posts
-// 			'publish_posts' 		=> 'publish_maps',
-// 			'edit_posts' 			=> 'edit_maps',
-// 			'edit_others_posts' 	=> 'edit_others_maps',
-// 			'delete_posts' 			=> 'delete_maps',
-// 			'delete_others_posts' 	=> 'delete_others_maps',
-// 			'read_private_posts' 	=> 'read_private_maps',
-// 			'edit_post' 			=> 'edit_map',
-// 			'delete_post' 			=> 'delete_map',
-// 			'read_post' 			=> 'read_map',
-// 			'manage_terms'          => 'manage_map_tag',
-// 			'edit_terms'            => 'edit_map_tag',
-// 			'delete_terms'          => 'delete_map_tag',
-// 			'assign_terms'          => 'assign_map_tag',
-// 		),
 	) );
 
 	register_taxonomy(
-		'map-tag',
+		'maptag',
 		'maps',
 		array(
 			'label' => 'タグ',
