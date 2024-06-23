@@ -401,3 +401,6 @@ add_filter( 'get_sample_permalink_html', function( $html, $postID, $new_title, $
 		);
 	}
 }, 10, 5 );
+
+// 投稿のスラッグを編集させたくないので、スクリーンオプションの機能を無効化
+add_filter( 'screen_options_show_screen', '__return_false' );

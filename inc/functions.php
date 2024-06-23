@@ -57,7 +57,7 @@ function define_map_caps() {
 		'edit_private_maps' => array( 'editor', 'author' ),
 		'edit_published_maps' => array( 'editor', 'author' ),
 		'publish_maps' => array( 'editor', 'author' ),
-		'read_private_maps' => array( 'editor', 'author' ),
+		'read_private_maps' => array( 'editor', 'author', 'contributor', 'subscriber' ),
 		'assign_maptags' => array( 'editor', 'author', 'contributor' ),
 		'delete_maptags' => array( 'editor', 'author' ),
 		'edit_maptags' => array( 'editor', 'author' ),
