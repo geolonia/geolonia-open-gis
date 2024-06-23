@@ -43,11 +43,8 @@ function register_post_type_maps() {
 	);
 }
 
-/**
- * Add capabilities to custom post type `maps`
- */
-function define_map_caps() {
-	$caps = array(
+function get_geolonia_open_gis_capabilities() {
+	return apply_filters( 'geolonia-open-gis-capabilities', array(
 		'delete_maps' => array( 'editor', 'author', 'contributor' ),
 		'delete_others_maps' => array( 'editor' ),
 		'delete_private_maps' => array( 'editor', 'author' ),
@@ -62,7 +59,14 @@ function define_map_caps() {
 		'delete_maptags' => array( 'editor', 'author' ),
 		'edit_maptags' => array( 'editor', 'author' ),
 		'manage_maptags' => array( 'editor' ),
-	);
+	) );
+}
+
+/**
+ * Add capabilities to custom post type `maps`
+ */
+function define_map_caps() {
+	$caps = get_geolonia_open_gis_capabilities();
 
 	foreach ( $caps as $cap => $roles ) {
 		foreach ( $roles as $role ) {

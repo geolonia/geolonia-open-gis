@@ -271,20 +271,10 @@ add_action( 'add_meta_boxes', function() {
 } );
 
 // Saves the latlng and the zoom as post meta.
-add_action( 'save_post', 'geolonia_gis_update_post', 10 );
-
-function geolonia_gis_update_post( $post_id ) {
+add_action( 'save_post', function( $post_id ) {
 
     // verify post is not a revision
     if ( ! wp_is_post_revision( $post_id ) ) {
-
-        // unhook this function to prevent infinite looping
-        remove_action( 'save_post', 'geolonia_gis_update_post' );
-
-        wp_update_post( array(
-            'ID' => $post_id,
-            'post_name' => md5( $post_id )
-        ));
 
 		if ( isset( $_POST['geolonia-gis-nonce-latlng'] ) ) {
 			$nonce = $_POST['geolonia-gis-nonce-latlng'];
@@ -312,13 +302,10 @@ function geolonia_gis_update_post( $post_id ) {
 				update_post_meta( $post_id, '_geolonia-gis-style', trim( $_POST['geolonia-gis-style'] ) );
 			}
 		}
-
-        // re-hook this function
-        add_action( 'save_post', 'geolonia_gis_update_post' );
-
-		return $post_id;
     }
-}
+
+	return $post_id;
+}, 10 );
 
 // Filters the content and replaces it with the Geolonia GIS map.
 add_filter( 'the_content',	function( $content ) {
@@ -371,8 +358,8 @@ add_filter( 'the_content',	function( $content ) {
 // Filters the REST API response and replaces the content with the GeoJSON.
 add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
 
-	if ( ! post_password_required( $post ) ) {
-		$response->data['content']['rendered'] = json_decode($post->post_content);
+	if ( ! post_password_required( $post ) && GEOLONIA_GIS_POST_TYPE === get_post_type() ){
+		$response->data['content']['rendered'] = json_decode( $post->post_content );
 	}
 
 	return $response;
@@ -389,18 +376,3 @@ add_filter( 'gettext', function( $translation, $text, $domain ) {
 
 	return $translation;
 }, 10, 3 );
-
-// 投稿画面のタイトルの真下にある slug の編集フォームをリンクに変更する
-add_filter( 'get_sample_permalink_html', function( $html, $postID, $new_title, $new_slug, $post ) {
-	if ( 'post.php' === $GLOBALS['pagenow'] && GEOLONIA_GIS_POST_TYPE === $post->post_type ) {
-		return sprintf(
-			'<strong>%s</strong> <a href="%s">%s</a>',
-			__( 'Permalink:' ),
-			esc_attr( get_permalink( $postID ) ),
-			esc_html( get_permalink( $postID ) )
-		);
-	}
-}, 10, 5 );
-
-// 投稿のスラッグを編集させたくないので、スクリーンオプションの機能を無効化
-add_filter( 'screen_options_show_screen', '__return_false' );
