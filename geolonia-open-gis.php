@@ -20,8 +20,6 @@
 
 // populate_roles(); // roles & capabilities を初期化
 
-require_once( dirname( __FILE__) . '/inc/functions.php' );
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Invalid request.' );
 }
@@ -35,6 +33,8 @@ if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
 if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
 	define( 'GEOLONIA_GIS_DEFAULT_STYLE', 'geolonia/gsi' );
 }
+
+require_once( dirname( __FILE__) . '/inc/functions.php' );
 
 register_activation_hook( __FILE__, function() {
 
