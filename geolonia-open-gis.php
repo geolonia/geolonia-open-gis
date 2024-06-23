@@ -34,10 +34,21 @@ if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
 	define( 'GEOLONIA_GIS_DEFAULT_STYLE', 'geolonia/gsi' );
 }
 
+if ( ! defined( 'GEOLONIA_GIS_DEFAULT_ZOOM' ) ) {
+	define( 'GEOLONIA_GIS_DEFAULT_ZOOM', 16 );
+}
+
+if ( ! defined( 'GEOLONIA_GIS_DEFAULT_LAT' ) ) {
+	define( 'GEOLONIA_GIS_DEFAULT_LAT', 35.67737939162146 );
+}
+
+if ( ! defined( 'GEOLONIA_GIS_DEFAULT_LNG' ) ) {
+	define( 'GEOLONIA_GIS_DEFAULT_LNG', 139.7478998426507 );
+}
+
 require_once( dirname( __FILE__) . '/inc/functions.php' );
 
 register_activation_hook( __FILE__, function() {
-
 	register_post_type_maps();
 	define_map_caps();
 
@@ -121,9 +132,13 @@ add_filter( 'the_editor', function( $editor ) {
 
 // Registers the scripts.
 add_action( 'admin_enqueue_scripts', function() {
+	if ( GEOLONIA_GIS_POST_TYPE !== get_post_type() ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'geolonia-embed-api',
-		'https://cdn.geolonia.com/v1/embed?geolonia-api-key=' . esc_html( GEOLONIA_API_KEY ),
+		esc_url( 'https://cdn.geolonia.com/v1/embed?geolonia-api-key=' . GEOLONIA_API_KEY ),
 		array(),
 		false,
 		true
@@ -365,11 +380,24 @@ add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
 }, 10, 3 );
 
 add_filter( 'gettext', function( $translation, $text, $domain ) {
-
-	if ( 'Word count: %s' === $text) {
-		$translation = '';
+	// 投稿画面の「文字数」を 「Count」（地物の数）に変更
+	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
+		if ( 'post.php' === $GLOBALS['pagenow'] && 'Word count: %s' === $text ) {
+			$translation = '';
+		}
 	}
 
 	return $translation;
-
 }, 10, 3 );
+
+// 投稿画面のタイトルの真下にある slug の編集フォームをリンクに変更する
+add_filter( 'get_sample_permalink_html', function( $html, $postID, $new_title, $new_slug, $post ) {
+	if ( 'post.php' === $GLOBALS['pagenow'] && GEOLONIA_GIS_POST_TYPE === $post->post_type ) {
+		return sprintf(
+			'<strong>%s</strong> <a href="%s">%s</a>',
+			__( 'Permalink:' ),
+			esc_attr( get_permalink( $postID ) ),
+			esc_html( get_permalink( $postID ) )
+		);
+	}
+}, 10, 5 );
