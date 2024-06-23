@@ -58,7 +58,7 @@ register_activation_hook( __FILE__, function() {
 // Registers the custom post type `maps`.
 add_action( 'init', function() {
 	register_post_type_maps();
-	define_map_caps();
+	define_map_caps(); // もしかしたらいらないかも？
 } );
 
 // Disable Gutenberg on the back end.

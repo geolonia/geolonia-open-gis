@@ -29,7 +29,7 @@ function register_post_type_maps() {
 		'maptag',
 		'maps',
 		array(
-			'label' => 'タグ',
+			'label' => __( 'Tags' ),
 			'hierarchical' => false,
 			'public' => true,
 			'show_in_rest' => true,
