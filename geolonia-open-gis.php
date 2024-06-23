@@ -14,6 +14,12 @@
 
 // Your code starts here.
 
+// if ( ! function_exists( 'populate_roles' ) ) {
+// 	require_once( ABSPATH . 'wp-admin/includes/schema.php' );
+// }
+
+// populate_roles(); // roles & capabilities を初期化
+
 require_once( dirname( __FILE__) . '/inc/functions.php' );
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,7 +39,7 @@ if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
 register_activation_hook( __FILE__, function() {
 
 	register_post_type_maps();
-	add_map_caps();
+	define_map_caps();
 
 	flush_rewrite_rules( false );
 } );
@@ -41,7 +47,7 @@ register_activation_hook( __FILE__, function() {
 // Registers the custom post type `maps`.
 add_action( 'init', function() {
 	register_post_type_maps();
-	add_map_caps();
+	define_map_caps();
 } );
 
 // Disable Gutenberg on the back end.
