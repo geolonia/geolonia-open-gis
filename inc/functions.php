@@ -70,8 +70,30 @@ function define_map_caps() {
 
 	foreach ( $caps as $cap => $roles ) {
 		foreach ( $roles as $role ) {
-			$role = get_role( $role );
-			$role->add_cap( $cap );
+			$_role = get_role( $role );
+			$_role->add_cap( $cap );
 		}
 	}
 }
+
+register_activation_hook( __FILE__, function() {
+	register_post_type_maps();
+	define_map_caps();
+
+	flush_rewrite_rules( false );
+} );
+
+
+register_deactivation_hook( __FILE__, function() {
+	$caps = get_geolonia_open_gis_capabilities();
+	$roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber');
+
+	foreach ( array_keys( $caps ) as $cap ) {
+		foreach ( $roles as $role ) {
+			$_role = get_role( $role );
+			$_role->remove_cap( $cap );
+		}
+	}
+
+	flush_rewrite_rules( false );
+} );

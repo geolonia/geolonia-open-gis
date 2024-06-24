@@ -48,13 +48,6 @@ if ( ! defined( 'GEOLONIA_GIS_DEFAULT_LNG' ) ) {
 
 require_once( dirname( __FILE__) . '/inc/functions.php' );
 
-register_activation_hook( __FILE__, function() {
-	register_post_type_maps();
-	define_map_caps();
-
-	flush_rewrite_rules( false );
-} );
-
 // Registers the custom post type `maps`.
 add_action( 'init', function() {
 	register_post_type_maps();
