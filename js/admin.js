@@ -234,9 +234,18 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     document.getElementById('geolonia-geojson-editor').addEventListener('change', (e) => {
       const content = e.target.value
       try {
-        const geojson = JSON.parse(content)
-        draw.set(geojson)
-        setFeatureCount(geojson)
+        if (!content) {
+          const geojson = {
+            "type": "FeatureCollection",
+            "features": []
+          }
+          draw.set(geojson)
+          setFeatureCount(geojson)
+        } else {
+          const geojson = JSON.parse(content)
+          draw.set(geojson)
+          setFeatureCount(geojson)
+        }
         setGeoJSON()
       } catch (e) {
       }
