@@ -23,7 +23,7 @@ const drawStyle = [
     },
     'paint': {
       'line-color': ['string', ['get', 'user_stroke'], '#3bb2d0'],
-      'line-width': 2
+      'line-width': ['number', ['get', 'user_stroke-width'], 2]
     }
   },
   {
