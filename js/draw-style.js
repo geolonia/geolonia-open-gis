@@ -40,19 +40,6 @@ const drawStyle = [
     }
   },
   {
-    'id': 'gl-draw-point-active',
-    'type': 'circle',
-    'filter': ['all',
-      ['==', '$type', 'Point'],
-      ['!=', 'meta', 'vertex'],
-      ['!=', 'meta', 'midpoint'],
-    ],
-    'paint': {
-      'circle-radius': 11,
-      'circle-color': '#fff'
-    }
-  },
-  {
     'id': 'gl-draw-point',
     'type': 'circle',
     'filter': ['all',
