@@ -36,7 +36,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
   // 地物の数をエディターの下に表示
   const setFeatureCount = (geojson) => {
     const count = geojson.features.length
-    document.getElementById('wp-word-count').innerText = 'Count: ' + count
+    document.getElementById('num-of-features').innerText = count
   }
 
   // カラーピッカー及びタイトル用のメタボックスの表示/非表示
@@ -99,6 +99,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     }
   }, false)
 
+  // ドロップされたファイルを読み込む
   document.getElementById('geolonia-uploader').addEventListener('drop', (e) => {
     e.preventDefault()
     document.getElementById('geolonia-uploader').style.display = 'none'
@@ -107,41 +108,49 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       return;
     }
 
+    console.log(e.dataTransfer)
+
     for (let i = 0; i < e.dataTransfer.items.length; i++) {
-      const file = e.dataTransfer.items[i].getAsFile()
+      const file = e.dataTransfer.items[i]
+      const fileName = e.dataTransfer.files[i].name
+      const fileContent = file.getAsFile()
       const reader = new FileReader()
 
-      reader.onload = (e) => {
-        const geojson = JSON.parse(e.target.result)
-        const features = draw.getAll().features.concat(geojson.features)
+      reader.onload = (readerEvent) => {
+        try {
+          const geojson = JSON.parse(readerEvent.target.result)
+          const features = draw.getAll().features.concat(geojson.features)
 
-        // stirigify() の結果のフォーマットを合わせるための処理
-        draw.set({
-          "type": "FeatureCollection",
-          "features": features
-        })
-        const data = draw.getAll() // フォーマットが統一された GeoJSON を取得
+          // stirigify() の結果のフォーマットを合わせるための処理
+          draw.set({
+            "type": "FeatureCollection",
+            "features": features
+          })
+          const data = draw.getAll() // フォーマットが統一された GeoJSON を取得
 
-        // 重複を削除するために stringify() する
-        const arr = data.features.map((feature) => {
-          delete feature.id
-          return JSON.stringify(feature)
-        })
+          // 重複を削除するために stringify() する
+          const arr = data.features.map((feature) => {
+            delete feature.id
+            return JSON.stringify(feature)
+          })
 
-        // 重複を削除
-        const result = arr.filter(function(item, pos) {
-          return arr.indexOf(item) == pos;
-        })
+          // 重複を削除
+          const result = arr.filter(function(item, pos) {
+            return arr.indexOf(item) == pos;
+          })
 
-        draw.set({
-          "type": "FeatureCollection",
-          "features": JSON.parse('[' + result.join(',') + ']')
-        })
+          draw.set({
+            "type": "FeatureCollection",
+            "features": JSON.parse('[' + result.join(',') + ']')
+          })
 
-        setGeoJSON()
+          setGeoJSON()
+        } catch (error) {
+          console.log(fileName)
+        }
       }
 
-      reader.readAsText(file)
+      reader.readAsText(fileContent)
     }
   }, false)
 
@@ -193,15 +202,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
     // 地物を新しく追加した際の処理
     map.on('draw.create', (e) => {
-      const featureId = e.features[0].id
-
-      const colorArray =  AColorPicker.parseColor(defaultColor)
-      colorArray.push(0.4)
-
-      draw.setFeatureProperty(featureId, 'marker-color', AColorPicker.parseColor(colorArray, 'rgbcss'))
-      draw.setFeatureProperty(featureId, 'stroke', AColorPicker.parseColor(colorArray, 'rgbcss'))
-      draw.setFeatureProperty(featureId, 'fill', AColorPicker.parseColor(colorArray, 'rgbacss'))
-
       setGeoJSON()
     });
 

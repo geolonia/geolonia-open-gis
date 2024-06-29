@@ -36,7 +36,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 7,
-      'circle-color': '#3bb2d0'
+      'circle-color': '#ff0000'
     }
   },
   {
@@ -62,7 +62,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 13,
-      'circle-color': '#3bb2d0'
+      'circle-color': '#ff0000'
     }
   },
   {
@@ -87,7 +87,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 9,
-      'circle-color': ['string', ['get', 'user_marker-color'], '#3bb2d0']
+      'circle-color': ['string', ['get', 'user_marker-color'], '#ff0000']
     }
   },
   {
