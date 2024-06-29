@@ -25,6 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'GEOLONIA_GIS_POST_TYPE', 'maps' );
+define( 'GEOLONIA_GIS_TEXTDOMAIN', 'geolonia-open-gis' );
 
 if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
 	define( 'GEOLONIA_API_KEY', 'YOUR-API-KEY' );
@@ -119,8 +120,10 @@ add_filter( 'the_editor', function( $editor ) {
 			<div class="close"></div>
 		</div>
 		<textarea id="geolonia-geojson-editor" spellcheck="false" style="display: none;"></textarea>
-		<textarea id="content" name="content" style="display: none;">%s</textarea></div>
-	</div>';
+		<textarea id="content" name="content" style="display: none;">%s</textarea>
+		<div id="geolonia-uploader"><span class="dashicons dashicons-upload">'.__('Upload GeoJSON', GEOLONIA_GIS_TEXTDOMAIN).'</span></div>
+		</div><!-- end .editor-container -->
+	</div><!-- end #geolonia-gis-editor-container -->';
 } );
 
 // Registers the scripts.

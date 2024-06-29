@@ -1,7 +1,7 @@
 if (document.getElementById('geolonia-gis-editor-container')) {
 
 
-  const defaultColor = '#3bb2d0'
+  const defaultColor = '#FF0000'
 
   const current = {
     features: [],
@@ -76,6 +76,89 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     })
   })
 
+  document.querySelector('#geolonia-gis-editor-container .editor-container').addEventListener('dragenter', (e) => {
+    document.getElementById('geolonia-uploader').style.display = 'flex'
+  }, false)
+
+  document.querySelector('#geolonia-gis-editor-container .editor-container').addEventListener('dragleave', (e) => {
+    if (e.target === document.getElementById('geolonia-uploader')) {
+      document.getElementById('geolonia-uploader').style.display = 'none'
+      document.getElementById('geolonia-uploader').classList.remove('alert')
+    }
+  }, false)
+
+  // これがないとファイルをドロップした際にブラウザがファイルを開いてしまう
+  document.getElementById('geolonia-uploader').addEventListener('dragover', (e) => {
+    e.preventDefault()
+
+    // GeoJSON 以外のファイルがひとつでもあれば拒否
+    for (let i = 0; i < e.dataTransfer.items.length; i++) {
+      if (!e.dataTransfer.items[i].type.match(/application\/(geo\+)?json/)) {
+        document.getElementById('geolonia-uploader').classList.add('alert')
+      }
+    }
+  }, false)
+
+  document.getElementById('geolonia-uploader').addEventListener('drop', (e) => {
+    e.preventDefault()
+    document.getElementById('geolonia-uploader').style.display = 'none'
+
+    if (document.getElementById('geolonia-uploader').classList.contains('alert')) {
+      return;
+    }
+
+    for (let i = 0; i < e.dataTransfer.items.length; i++) {
+      const file = e.dataTransfer.items[i].getAsFile()
+      const reader = new FileReader()
+
+      reader.onload = (e) => {
+        const geojson = JSON.parse(e.target.result)
+        const features = draw.getAll().features.concat(geojson.features)
+
+        // stirigify() の結果のフォーマットを合わせるための処理
+        draw.set({
+          "type": "FeatureCollection",
+          "features": features
+        })
+        const data = draw.getAll() // フォーマットが統一された GeoJSON を取得
+
+        // 重複を削除するために stringify() する
+        const arr = data.features.map((feature) => {
+          delete feature.id
+          return JSON.stringify(feature)
+        })
+
+        // 重複を削除
+        const result = arr.filter(function(item, pos) {
+          return arr.indexOf(item) == pos;
+        })
+
+        draw.set({
+          "type": "FeatureCollection",
+          "features": JSON.parse('[' + result.join(',') + ']')
+        })
+
+        setGeoJSON()
+      }
+
+      reader.readAsText(file)
+    }
+  }, false)
+
+  // GeoJSON エディタの内容をWP用のコンテンツとしてセットする
+  const setGeoJSON = () => {
+    const geojson = draw.getAll()
+
+    setFeatureCount(geojson)
+
+    const last = current.undo[current.undo.length - 1]
+    if (JSON.stringify(geojson) !== JSON.stringify(last)) {
+      current.undo.push(geojson)
+    }
+
+    document.getElementById('content').value = JSON.stringify(geojson)
+  }
+
   map.on('load', () => {
 
     map.addControl(draw, 'top-right') // draw の各種コントロールを追加
@@ -99,20 +182,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       setFeatureCount(geojson)
     }
 
-    // GeoJSON エディタの内容をWP用のコンテンツとしてセットする
-    const setGeoJSON = () => {
-      const geojson = draw.getAll()
-
-      setFeatureCount(geojson)
-
-      const last = current.undo[current.undo.length - 1]
-      if (JSON.stringify(geojson) !== JSON.stringify(last)) {
-        current.undo.push(geojson)
-      }
-
-      document.getElementById('content').value = JSON.stringify(geojson)
-    }
-
     // 地図の外側をクリックしたらすべての選択を外す
     document.body.addEventListener('click', (e) => {
       if (null === e.target.closest('#geolonia-gis-editor-container .editor-container')) {
@@ -127,7 +196,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       const featureId = e.features[0].id
 
       const colorArray =  AColorPicker.parseColor(defaultColor)
-      colorArray.push(0.2)
+      colorArray.push(0.4)
 
       draw.setFeatureProperty(featureId, 'marker-color', AColorPicker.parseColor(colorArray, 'rgbcss'))
       draw.setFeatureProperty(featureId, 'stroke', AColorPicker.parseColor(colorArray, 'rgbcss'))
@@ -172,7 +241,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     // カラーピッカーで色を変更した際の処理
     colorPicker.on( 'change', ( picker, color ) => {
       const colorArray =  AColorPicker.parseColor(color)
-      colorArray.push(0.2)
+      colorArray.push(0.4)
 
       for (let i = 0; i < current.features.length; i++) {
         const featureId = current.features[i].id
@@ -190,7 +259,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       if (e.features.length && e.features[0].id) {
         current.features = e.features
         toggleMetabox(true)
-        colorPicker.setColor(e.features[0].properties.stroke, false)
+        colorPicker.setColor(e.features[0].properties.stroke || defaultColor, false)
         document.getElementById('geojson-meta-title').value = e.features[0].properties.title || ''
       } else {
         current.features = []

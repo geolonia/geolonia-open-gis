@@ -6,8 +6,8 @@
 #geolonia-gis-editor-container .editor-container
 {
 	width: 100%;
-	height: calc(100vh - 400px);
-	min-height: 200px;
+	height: calc(100vh - 350px);
+	min-height: 400px;
 	position: relative;
 }
 
@@ -122,4 +122,44 @@
 	background-color: #ECECED;
 	color: #666666;
 	cursor: pointer;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-uploader
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 9999;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	display: none;
+	color: #ffffff;
+	box-sizing: border-box;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-uploader .dashicons-upload
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	white-space: nowrap;
+	font-weight: bolder;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-uploader .dashicons-upload::before
+{
+	font-size: 200px;
+}
+
+#geolonia-gis-editor-container .editor-container #geolonia-uploader.alert
+{
+	border: 5px dashed #FF0000;
+	background-color: rgba(100, 0, 0, 0.4);
+	color: #ff0000;
 }

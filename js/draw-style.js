@@ -6,8 +6,8 @@ const drawStyle = [
       ['==', '$type', 'Polygon'],
     ],
     'paint': {
-      'fill-color': ['string', ['get', 'user_fill'], 'rgba(59, 178, 208, 0.2)'],
-      'fill-outline-color': ['string', ['get', 'user_stroke'], '#3bb2d0'],
+      'fill-color': ['string', ['get', 'user_fill'], 'rgba(255, 0, 0, 0.4)'],
+      'fill-outline-color': ['string', ['get', 'user_stroke'], '#FF0000'],
       'fill-opacity': 1
     }
   },
@@ -22,7 +22,7 @@ const drawStyle = [
       'line-join': 'round'
     },
     'paint': {
-      'line-color': ['string', ['get', 'user_stroke'], '#3bb2d0'],
+      'line-color': ['string', ['get', 'user_stroke'], '#FF0000'],
       'line-width': ['number', ['get', 'user_stroke-width'], 2]
     }
   },
