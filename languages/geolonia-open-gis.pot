@@ -1,0 +1,60 @@
+# Copyright (C) 2024 Geolonia Inc.
+# This file is distributed under the same license as the Geolonia Open GIS plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Geolonia Open GIS 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/geolonia-open-gis\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-06-29T16:13:37+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: geolonia-open-gis\n"
+
+#. Plugin Name of the plugin
+msgid "Geolonia Open GIS"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://geolonia.com/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Open GIS for WordPress"
+msgstr ""
+
+#. Author of the plugin
+msgid "Geolonia Inc."
+msgstr ""
+
+#: geolonia-open-gis.php:123
+msgid "Upload GeoJSON"
+msgstr ""
+
+#: geolonia-open-gis.php:204
+msgid "Coordinates"
+msgstr ""
+
+#: geolonia-open-gis.php:221
+msgid "Use the current coordinates"
+msgstr ""
+
+#: geolonia-open-gis.php:230
+msgid "Zoom"
+msgstr ""
+
+#: geolonia-open-gis.php:241
+msgid "Use the current zoom level"
+msgstr ""
+
+#: geolonia-open-gis.php:250
+msgid "Style"
+msgstr ""
+
+#: geolonia-open-gis.php:368
+msgid "Number of features: <span id=\"num-of-features\"></span>"
+msgstr ""
