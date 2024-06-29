@@ -366,7 +366,7 @@ add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
 add_filter( 'gettext', function( $translation, $text, $domain ) {
 	// 投稿画面の「文字数」を 「Count」（地物の数）に変更
 	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
-		if ( 'post.php' === $GLOBALS['pagenow'] && 'Word count: %s' === $text ) {
+		if ( 'Word count: %s' === $text ) {
 			$translation = __( 'Number of features: <span id="num-of-features"></span>', 'geolonia-open-gis' );
 		}
 	}
