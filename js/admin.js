@@ -69,7 +69,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       } else if ('geojson' === e.target.dataset.editor) {
         document.getElementById('geolonia-geojson-editor').style.display = 'block'
 
-        const content = document.getElementById('content').value
+        const content = document.getElementById('content').value || '{"type": "FeatureCollection","features": []}'
         const geojson = JSON.stringify(JSON.parse(content), null, 2)
         document.getElementById('geolonia-geojson-editor').value = geojson
       }
@@ -108,8 +108,6 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       return;
     }
 
-    console.log(e.dataTransfer)
-
     for (let i = 0; i < e.dataTransfer.items.length; i++) {
       const file = e.dataTransfer.items[i]
       const fileName = e.dataTransfer.files[i].name
@@ -118,8 +116,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       reader.onload = (readerEvent) => {
         try {
-          const geojson = JSON.parse(readerEvent.target.result)
-          const features = draw.getAll().features.concat(geojson.features)
+          const features = draw.getAll().features.concat(JSON.parse(readerEvent.target.result).features)
 
           // stirigify() の結果のフォーマットを合わせるための処理
           draw.set({
@@ -139,10 +136,14 @@ if (document.getElementById('geolonia-gis-editor-container')) {
             return arr.indexOf(item) == pos;
           })
 
-          draw.set({
+          const geoJson = {
             "type": "FeatureCollection",
             "features": JSON.parse('[' + result.join(',') + ']')
-          })
+          }
+
+          draw.set(geoJson)
+
+          document.getElementById('geolonia-geojson-editor').value = JSON.stringify(geoJson, null, 2)
 
           setGeoJSON()
         } catch (error) {
