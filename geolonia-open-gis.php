@@ -42,13 +42,10 @@ if ( ! defined( 'GEOLONIA_GIS_DEFAULT_LNG' ) ) {
 
 require_once( dirname( __FILE__) . '/inc/functions.php' );
 
-add_action( 'plugins_loaded', function() {
-	load_plugin_textdomain(
-		"geolonia-open-gis",
-		false,
-		dirname( plugin_basename( __FILE__ ) ).'/languages'
-	 );
-} );
+function geolonia_gis_load_textdomain() {
+	return load_plugin_textdomain( 'geolonia-open-gis', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'plugins_loaded', 'geolonia_gis_load_textdomain');
 
 // Registers the custom post type `maps`.
 add_action( 'init', function() {
