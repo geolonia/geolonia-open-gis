@@ -14,12 +14,6 @@
 
 // Your code starts here.
 
-// if ( ! function_exists( 'populate_roles' ) ) {
-// 	require_once( ABSPATH . 'wp-admin/includes/schema.php' );
-// }
-
-// populate_roles(); // roles & capabilities を初期化
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Invalid request.' );
 }
@@ -47,6 +41,14 @@ if ( ! defined( 'GEOLONIA_GIS_DEFAULT_LNG' ) ) {
 }
 
 require_once( dirname( __FILE__) . '/inc/functions.php' );
+
+add_action( 'plugins_loaded', function() {
+	load_plugin_textdomain(
+		"geolonia-open-gis",
+		false,
+		dirname( plugin_basename( __FILE__ ) ).'/languages'
+	 );
+} );
 
 // Registers the custom post type `maps`.
 add_action( 'init', function() {
@@ -119,8 +121,10 @@ add_filter( 'the_editor', function( $editor ) {
 			<div class="close"></div>
 		</div>
 		<textarea id="geolonia-geojson-editor" spellcheck="false" style="display: none;"></textarea>
-		<textarea id="content" name="content" style="display: none;">%s</textarea></div>
-	</div>';
+		<textarea id="content" name="content" style="display: none;">%s</textarea>
+		<div id="geolonia-uploader"><span class="dashicons dashicons-upload">'.__('Upload GeoJSON', 'geolonia-open-gis').'</span></div>
+		</div><!-- end .editor-container -->
+	</div><!-- end #geolonia-gis-editor-container -->';
 } );
 
 // Registers the scripts.
@@ -199,7 +203,7 @@ add_action( 'wp_enqueue_scripts', function() {
 add_action( 'add_meta_boxes', function() {
 	add_meta_box(
 		'geolonia-gis-meta-center',
-		'中心座標',
+		__( 'Coordinates', 'geolonia-open-gis' ),
 		function() {
 			$lat = GEOLONIA_GIS_DEFAULT_LAT;
 			$lng = GEOLONIA_GIS_DEFAULT_LNG;
@@ -216,7 +220,7 @@ add_action( 'add_meta_boxes', function() {
 			?>
 				<p><input type="text" id="geolonia-gis-lat" name="geolonia-gis-lat" class="geolonia-meta" value="<?php echo esc_attr($lat) ?>"></p>
 				<p><input type="text" id="geolonia-gis-lng" name="geolonia-gis-lng" class="geolonia-meta" value="<?php echo esc_attr($lng) ?>"></p>
-				<p><button type="button" id="geolonia-get-latlng-button" class="geolonia-meta button">現在の座標を使用する</button></p>
+				<p><button type="button" id="geolonia-get-latlng-button" class="geolonia-meta button"><?php echo __( 'Use the current coordinates', 'geolonia-open-gis' ); ?></button></p>
 			<?php
 		},
 		GEOLONIA_GIS_POST_TYPE,
@@ -225,7 +229,7 @@ add_action( 'add_meta_boxes', function() {
 
 	add_meta_box(
 		'geolonia-gis-meta-zoom',
-		'ズームレベル',
+		__( 'Zoom', 'geolonia-open-gis' ),
 		function() {
 			$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
@@ -236,7 +240,7 @@ add_action( 'add_meta_boxes', function() {
 			wp_nonce_field( 'geolonia-gis-nonce-zoom', 'geolonia-gis-nonce-zoom' );
 			?>
 				<p><input type="text" id="geolonia-gis-zoom" name="geolonia-gis-zoom" class="geolonia-meta" value="<?php echo esc_attr($zoom) ?>"></p>
-				<p><button type="button" id="geolonia-get-zoom-button" class="geolonia-meta button">現在のズームレベルを使用する</button></p>
+				<p><button type="button" id="geolonia-get-zoom-button" class="geolonia-meta button"><?php echo __( 'Use the current zoom level', 'geolonia-open-gis' ); ?></button></p>
 			<?php
 		},
 		GEOLONIA_GIS_POST_TYPE,
@@ -245,7 +249,7 @@ add_action( 'add_meta_boxes', function() {
 
 	add_meta_box(
 		'geolonia-gis-meta-style',
-		'スタイル',
+		__( 'Style', 'geolonia-open-gis' ),
 		function() {
 			$style = GEOLONIA_GIS_DEFAULT_STYLE;
 
@@ -362,8 +366,8 @@ add_filter( 'rest_prepare_maps', function( $response, $post, $request ) {
 add_filter( 'gettext', function( $translation, $text, $domain ) {
 	// 投稿画面の「文字数」を 「Count」（地物の数）に変更
 	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
-		if ( 'post.php' === $GLOBALS['pagenow'] && 'Word count: %s' === $text ) {
-			$translation = '';
+		if ( 'Word count: %s' === $text ) {
+			$translation = __( 'Number of features: <span id="num-of-features"></span>', 'geolonia-open-gis' );
 		}
 	}
 
