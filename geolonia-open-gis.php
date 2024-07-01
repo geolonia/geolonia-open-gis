@@ -306,7 +306,7 @@ add_action( 'save_post', function( $post_id ) {
 
 // Filters the content and replaces it with the Geolonia GIS map.
 add_filter( 'the_content',	function( $content ) {
-	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() ) {
+	if ( GEOLONIA_GIS_POST_TYPE === get_post_type() && ! post_password_required( get_the_ID() ) ){
 		$zoom = GEOLONIA_GIS_DEFAULT_ZOOM;
 
 		if ( floatval( get_post_meta(get_the_ID(), '_geolonia-gis-zoom', true) ) > 0 ) {
