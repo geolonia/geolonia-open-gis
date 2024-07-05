@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'Invalid request.' );
 }
 
-define( 'GEOLONIA_GIS_POST_TYPE', 'maps' );
+define( 'GEOLONIA_GIS_POST_TYPE', 'map' );
 
 if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
 	define( 'GEOLONIA_API_KEY', 'YOUR-API-KEY' );

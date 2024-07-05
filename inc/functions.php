@@ -6,7 +6,7 @@
  */
 function register_post_type_maps() {
 
-	register_post_type( 'maps', array(
+	register_post_type( 'map', array(
 		'label'                 => 'Map',
 		'public'                => true,
 		'hierarchical'          => false,
@@ -27,7 +27,7 @@ function register_post_type_maps() {
 
 	register_taxonomy(
 		'maptag',
-		'maps',
+		'map',
 		array(
 			'label' => __( 'Tags' ),
 			'hierarchical' => false,

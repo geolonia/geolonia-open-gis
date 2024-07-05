@@ -63,7 +63,7 @@ const drawStyle = [
     ],
     'paint': {
       'circle-radius': 9,
-      'circle-color': ['string', ['get', 'user_marker-color'], '#ff0000']
+      'circle-color': ['string', ['get', 'user_marker-color'], 'rgba(255, 0, 0, 0.4)']
     }
   },
   {
@@ -136,8 +136,8 @@ const drawStyle = [
         ['==', 'large', ['get', 'marker-size']], ['literal', [0, 1.6]],
         ['literal', [0, 1.2]],
       ],
-      'text-allow-overlap': true,
-      'icon-allow-overlap': true,
+      'text-allow-overlap': false,
+      'icon-allow-overlap': false,
       'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
       'text-radial-offset': [
         'case',
