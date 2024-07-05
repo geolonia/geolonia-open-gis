@@ -76,7 +76,7 @@ add_filter( 'wp_editor_settings', function( $settings, $editor_id ) {
 
 // Replaces the editor with the Geolonia GIS editor.
 add_filter( 'the_editor', function( $editor ) {
-	if ( GEOLONIA_GIS_POST_TYPE !== get_post_type() ) {
+	if ( GEOLONIA_GIS_POST_TYPE !== get_post_type() || ! user_can_richedit() ) {
 		return $editor;
 	}
 
@@ -259,7 +259,15 @@ add_action( 'add_meta_boxes', function() {
 
 			wp_nonce_field( 'geolonia-gis-nonce-style', 'geolonia-gis-nonce-style' );
 			?>
-				<p><input type="text" id="geolonia-gis-style" name="geolonia-gis-style" class="geolonia-meta" value="<?php echo esc_attr($style) ?>"></p>
+			<div class="select-geolonia-styles">
+				<select onchange="this.nextElementSibling.value=this.value">
+					<option value=""></option>
+					<option value="115x175 mm">115x175 mm</option>
+					<option value="120x160 mm">120x160 mm</option>
+					<option value="120x287 mm">120x287 mm</option>
+				</select>
+				<input type="text" id="geolonia-gis-style" name="geolonia-gis-style" class="geolonia-meta" value="<?php echo esc_attr($style) ?>">
+			</div>
 			<?php
 		},
 		GEOLONIA_GIS_POST_TYPE,
