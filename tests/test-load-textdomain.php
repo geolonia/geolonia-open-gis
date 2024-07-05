@@ -1,11 +1,9 @@
 <?php
 /**
  * Class TestLoadTextdomain
- *
- * @package Geolonia_Gis
  */
 
-class TestLoadTextdomain extends WP_UnitTestCase {
+class Test_LoadTextdomain extends WP_UnitTestCase {
 	protected static $user_id;
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
@@ -18,7 +16,7 @@ class TestLoadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_textdomain when locale is Japanese
+	 * @covers ::geolonia_gis_load_textdomain
 	 */
 	public function test_load_textdomain() {
 
@@ -29,9 +27,9 @@ class TestLoadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_textdomain when plugin_locale is Japanese
+	 * @covers ::geolonia_gis_load_textdomain
 	 */
-	public function test_load_textdomain_plugin_locale() {
+	public function test_load_textdomain_by_plugin_locale() {
 		add_filter('plugin_locale', function() {
 			return 'ja';
 		});
@@ -39,9 +37,9 @@ class TestLoadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_textdomain when locale is English
+	 * @covers ::geolonia_gis_load_textdomain
 	 */
-	public function test_load_textdomain_en() {
+	public function test_load_textdomain_when_locale_is_english() {
 		add_filter('locale', function() {
 			return 'en_US';
 		});
@@ -49,9 +47,9 @@ class TestLoadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_textdomain when plugin_locale is English
+	 * @covers ::geolonia_gis_load_textdomain
 	 */
-	public function test_load_textdomain_plugin_locale_en() {
+	public function test_load_textdomain_plugin_locale_is_english() {
 		add_filter('plugin_locale', function() {
 			return 'en_US';
 		});
@@ -59,9 +57,9 @@ class TestLoadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test load_textdomain when user locale is Japanese
+	 * @covers ::geolonia_gis_load_textdomain
 	 */
-	public function test_load_textdomain_ja_user() {
+	public function test_load_textdomain_user_locale_is_japanese() {
 
 		add_filter('locale', function() {
 			return 'en_US';
