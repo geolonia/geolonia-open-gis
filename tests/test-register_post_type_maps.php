@@ -34,61 +34,61 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
 
         $maps_object = get_post_type_object( 'maps' );
 
-        // Check label
+        // labels の設定値を確認
         $this->assertSame( 'Map', $maps_object->label );
 
-        // Check public
+        // public の設定値を確認
         $this->assertTrue( $maps_object->public );
 
-        // Check hierarchical
+        // hierarchical の設定値を確認
         $this->assertFalse( $maps_object->hierarchical );
 
-        // Check show_ui
+        // show_ui の設定値を確認
         $this->assertTrue( $maps_object->show_ui );
 
-        // Check show_in_nav_menus
+        // show_in_menu の設定値を確認
         $this->assertTrue( $maps_object->show_in_nav_menus );
 
-		// Check title support
+		// カスタム投稿タイプの supports に title が含まれているか確認
 		$this->assertTrue( post_type_supports( 'maps', 'title' ), 'Title support is enabled' );
 
-		// Check editor support
+		// カスタム投稿タイプの supports に editor が含まれているか確認
 		$this->assertTrue( post_type_supports( 'maps', 'editor' ), 'Editor support is enabled' );
 
-		// Check revisions support
+		// カスタム投稿タイプの supports に author が含まれているか確認
 		$this->assertTrue( post_type_supports( 'maps', 'revisions' ), 'Revisions support is enabled' );
 
-		// Check excerpt support
+		// カスタム投稿タイプの supports に excerpt が含まれているか確認
 		$this->assertTrue( post_type_supports( 'maps', 'excerpt' ), 'Excerpt support is enabled' );
 
-        // Check has_archive
+        // archive の設定値を確認
         $this->assertFalse( $maps_object->has_archive );
 
-        // Check rewrite
+        // rewrite の設定値を確認
         $this->assertSame( array('slug' => 'maps'), $maps_object->rewrite );
 
-        // Check query_var
+        // query_var の設定値を確認
         $this->assertSame( 'maps', $maps_object->query_var );
 
-        // Check menu_icon
+        // menu_icon の設定値を確認
         $this->assertSame( 'dashicons-location', $maps_object->menu_icon );
 
-        // Check show_in_rest
+        // show_in_rest の設定値を確認
         $this->assertTrue( $maps_object->show_in_rest );
 
-        // Check rest_base
+        // rest_base の設定値を確認
         $this->assertSame( GEOLONIA_GIS_POST_TYPE, $maps_object->rest_base );
 
-        // Check rest_controller_class
+		// rest_controller_class の設定値を確認
         $this->assertSame( 'WP_REST_Posts_Controller', $maps_object->rest_controller_class );
 
-        // Check taxonomies
+        // taxonomies の設定値を確認
         $this->assertSame( array( 'map_tag' ), $maps_object->taxonomies );
 
-        // Check capability_type
+        // capability_type の設定値を確認
         $this->assertSame( 'map', $maps_object->capability_type );
 
-        // Check map_meta_cap
+        // map_meta_cap の設定値を確認
         $this->assertTrue( $maps_object->map_meta_cap );
     }
 }
