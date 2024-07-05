@@ -10,3 +10,24 @@ define( 'GEOLONIA_GIS_DEFAULT_ZOOM', 16 );
 define( 'GEOLONIA_GIS_DEFAULT_LAT', 34.86707002642607 );
 define( 'GEOLONIA_GIS_DEFAULT_LNG', 138.32283481501884 );
 ```
+
+
+## 開発者向け
+
+### テスト環境のセットアップ
+
+- 初回のみ以下のコマンドを実行して依存関係のインストールと、テスト用の WordPress のセットアップを行ってください。
+- `svn` と `php` のインストールが必要です
+
+```bash
+$ composer install
+$ bash bin/install-wp-tests.sh wordpress_test root '' localhost latest
+```
+
+### テストの実行
+
+テストを実行するためには、以下のコマンドを実行してください。
+
+```bash
+$ composer test
+```

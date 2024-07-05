@@ -5,6 +5,10 @@
  * @package Geolonia_Gis
  */
 
+
+// WP_PLUGIN_DIR　現在のプラグインの上位ディレクトリを指定する
+define('WP_PLUGIN_DIR', dirname(dirname(dirname(__FILE__))));
+
 // Load PHPUnit Polyfills.
 require_once dirname( __FILE__ ) . '/../vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 
