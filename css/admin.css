@@ -163,3 +163,53 @@
 	background-color: rgba(100, 0, 0, 0.4);
 	color: #ff0000;
 }
+
+#geolonia-style-data-list
+{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+#geolonia-style-data-list li
+{
+	width: 30%;
+	max-width: 256px;
+	border: 1px solid #0a4b78;;
+	text-align: center;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	margin-bottom: 8px;
+	opacity: 0.6;
+	cursor: pointer;
+}
+
+#geolonia-style-data-list li.hover
+{
+	opacity: 1;
+}
+
+#geolonia-style-data-list li.active
+{
+	opacity: 1;
+}
+
+#geolonia-style-data-list li img
+{
+	max-width: 100%;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+#geolonia-style-data-list li .style-name
+{
+	position: absolute;
+	bottom: 4px;
+	left: 0;
+	right: 0;
+	text-shadow: 0 0 2px #FFFFFF;
+	color: #000000;
+}

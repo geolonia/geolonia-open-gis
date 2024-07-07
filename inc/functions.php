@@ -7,7 +7,7 @@
 function register_post_type_maps() {
 
 	register_post_type( 'map', array(
-		'label'                 => 'Map',
+		'label'                 => __( 'Map', 'geolonia-open-gis' ),
 		'public'                => true,
 		'hierarchical'          => false,
 		'show_ui'               => true,

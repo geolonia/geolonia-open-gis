@@ -169,6 +169,20 @@ if (document.getElementById('geolonia-gis-editor-container')) {
     document.getElementById('content').value = JSON.stringify(geojson)
   }
 
+  document.querySelectorAll('#geolonia-style-data-list li').forEach((li) => {
+    li.addEventListener('click', (e) => {
+      const styleUrl = e.currentTarget.dataset.url
+      document.getElementById('geolonia-gis-style').value = styleUrl
+      map.setStyle(styleUrl)
+    })
+    li.addEventListener('mouseover', (e) => {
+      document.querySelectorAll('#geolonia-style-data-list li').forEach((li) => {
+        li.classList.remove('hover')
+        e.currentTarget.classList.add('hover')
+      })
+    })
+  })
+
   map.on('load', () => {
 
     map.addControl(draw, 'top-right') // draw の各種コントロールを追加

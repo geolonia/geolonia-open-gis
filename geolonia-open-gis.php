@@ -25,7 +25,7 @@ if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
 }
 
 if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
-	define( 'GEOLONIA_GIS_DEFAULT_STYLE', 'geolonia/gsi' );
+	define( 'GEOLONIA_GIS_DEFAULT_STYLE', plugins_url( '/styles/standard.json', __FILE__ ) );
 }
 
 if ( ! defined( 'GEOLONIA_GIS_DEFAULT_ZOOM' ) ) {
@@ -164,25 +164,25 @@ add_action( 'admin_enqueue_scripts', function() {
 
 	wp_enqueue_script(
 		'geolonia-gis-draw-style',
-		plugins_url( 'js/draw-style.js', __FILE__ ),
+		plugins_url( '/js/draw-style.js', __FILE__ ),
 		array(),
-		filemtime( plugin_dir_path( __FILE__ ) . 'js/draw-style.js' ),
+		filemtime( plugin_dir_path( __FILE__ ) . '/js/draw-style.js' ),
 		true
 	);
 
 	wp_enqueue_script(
 		'geolonia-gis',
-		plugins_url( 'js/admin.js', __FILE__ ),
+		plugins_url( '/js/admin.js', __FILE__ ),
 		array( 'geolonia-embed-api', 'mapbox-gl-draw', 'geolonia-color-picker', 'geolonia-gis-draw-style' ),
-		filemtime( plugin_dir_path( __FILE__ ) . 'js/admin.js' ),
+		filemtime( plugin_dir_path( __FILE__ ) . '/js/admin.js' ),
 		true
 	);
 
 	wp_enqueue_style(
 		'geolonia-gis-css',
-		plugins_url( 'css/admin.css', __FILE__ ),
+		plugins_url( '/css/admin.css', __FILE__ ),
 		array( 'mapbox-gl-draw-css' ),
-		filemtime( plugin_dir_path( __FILE__ ) . 'css/admin.css' )
+		filemtime( plugin_dir_path( __FILE__ ) . '/css/admin.css' )
 	);
 }, 20 );
 
@@ -258,13 +258,32 @@ add_action( 'add_meta_boxes', function() {
 			wp_nonce_field( 'geolonia-gis-nonce-style', 'geolonia-gis-nonce-style' );
 			?>
 			<div class="select-geolonia-styles">
-				<select onchange="this.nextElementSibling.value=this.value">
-					<option value=""></option>
-					<option value="115x175 mm">115x175 mm</option>
-					<option value="120x160 mm">120x160 mm</option>
-					<option value="120x287 mm">120x287 mm</option>
-				</select>
-				<input type="text" id="geolonia-gis-style" name="geolonia-gis-style" class="geolonia-meta" value="<?php echo esc_attr($style) ?>">
+				<input id="geolonia-gis-style" name="geolonia-gis-style" list="styles" class="geolonia-meta" value="<?php echo esc_attr($style) ?>" autocomplete="off" />
+				<ul id="geolonia-style-data-list">
+				<?php
+					$default_styles = apply_filters( 'geolonia-open-gis-styles', array(
+						array(
+							'name' => __( 'Standard', 'geolonia-open-gis' ),
+							'image' => plugins_url( '/styles/standard.png', __FILE__ ),
+							'url' => plugins_url( '/styles/standard.json', __FILE__ ),
+						),
+						array(
+							'name' => __( 'GSI', 'geolonia-open-gis' ),
+							'image' => plugins_url( '/styles/gsi-vector.png', __FILE__ ),
+							'url' => plugins_url( '/styles/gsi-vector.json', __FILE__ ),
+						),
+						array(
+							'name' => __( 'Blank Map', 'geolonia-open-gis' ),
+							'image' => plugins_url( '/styles/blank-map.png', __FILE__ ),
+							'url' => plugins_url( '/styles/blank-map.json', __FILE__ ),
+						),
+					) );
+
+					foreach ( $default_styles as $style ) {
+						echo '<li data-url="' . esc_url( $style['url'] ) . '"><img src="' . esc_url( $style['image'] ) . '"><div class="style-name">' . esc_html( $style['name'] ) . '</div></li>';
+					}
+				?>
+				</ul>
 			</div>
 			<?php
 		},
