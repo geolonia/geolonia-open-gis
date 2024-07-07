@@ -249,16 +249,16 @@ add_action( 'add_meta_boxes', function() {
 		'geolonia-gis-meta-style',
 		__( 'Style', 'geolonia-open-gis' ),
 		function() {
-			$style = GEOLONIA_GIS_DEFAULT_STYLE;
+			$current_style = GEOLONIA_GIS_DEFAULT_STYLE;
 
 			if ( get_post_meta( get_the_ID(), '_geolonia-gis-style', true ) ) {
-				$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
+				$current_style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
 			}
 
 			wp_nonce_field( 'geolonia-gis-nonce-style', 'geolonia-gis-nonce-style' );
 			?>
 			<div class="select-geolonia-styles">
-				<input id="geolonia-gis-style" name="geolonia-gis-style" list="styles" class="geolonia-meta" value="<?php echo esc_attr($style) ?>" autocomplete="off" />
+				<input id="geolonia-gis-style" name="geolonia-gis-style" list="styles" class="geolonia-meta" value="<?php echo esc_url($current_style) ?>" autocomplete="off" />
 				<ul id="geolonia-style-data-list">
 				<?php
 					$default_styles = apply_filters( 'geolonia-open-gis-styles', array(
@@ -279,8 +279,14 @@ add_action( 'add_meta_boxes', function() {
 						),
 					) );
 
+
+
 					foreach ( $default_styles as $style ) {
-						echo '<li data-url="' . esc_url( $style['url'] ) . '"><img src="' . esc_url( $style['image'] ) . '"><div class="style-name">' . esc_html( $style['name'] ) . '</div></li>';
+						if ($current_style === $style['url']) {
+							echo '<li class="active" data-url="' . esc_url( $style['url'] ) . '"><img src="' . esc_url( $style['image'] ) . '"><div class="style-name">' . esc_html( $style['name'] ) . '</div></li>';
+						} else {
+							echo '<li data-url="' . esc_url( $style['url'] ) . '"><img src="' . esc_url( $style['image'] ) . '"><div class="style-name">' . esc_html( $style['name'] ) . '</div></li>';
+						}
 					}
 				?>
 				</ul>

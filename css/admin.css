@@ -176,7 +176,7 @@
 {
 	width: 30%;
 	max-width: 256px;
-	border: 1px solid #0a4b78;;
+	border: 2px solid #8c8f94;
 	text-align: center;
 	position: relative;
 	margin: 0;
@@ -194,6 +194,7 @@
 #geolonia-style-data-list li.active
 {
 	opacity: 1;
+	border-color: #2271b1;
 }
 
 #geolonia-style-data-list li img
