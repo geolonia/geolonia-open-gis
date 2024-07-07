@@ -25,7 +25,7 @@ if ( ! defined( 'GEOLONIA_API_KEY' ) ) {
 }
 
 if ( ! defined( 'GEOLONIA_GIS_DEFAULT_STYLE' ) ) {
-	define( 'GEOLONIA_GIS_DEFAULT_STYLE', plugins_url( '/styles/standard.json', __FILE__ ) );
+	define( 'GEOLONIA_GIS_DEFAULT_STYLE', apply_filters( 'geolonia-open-gis-default-style', plugins_url( '/styles/standard.json', __FILE__ ) ) );
 }
 
 if ( ! defined( 'GEOLONIA_GIS_DEFAULT_ZOOM' ) ) {

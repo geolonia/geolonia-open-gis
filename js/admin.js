@@ -178,7 +178,11 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
       const styleUrl = e.currentTarget.dataset.url
       document.getElementById('geolonia-gis-style').value = styleUrl
-      map.setStyle(styleUrl)
+      try {
+        map.setStyle(styleUrl)
+      } catch (e) {
+        console.log(e)
+      }
     })
     li.addEventListener('mouseover', (e) => {
       e.currentTarget.classList.add('hover')
@@ -189,6 +193,14 @@ if (document.getElementById('geolonia-gis-editor-container')) {
       })
     })
   })
+
+  document.getElementById('geolonia-gis-style').addEventListener('change', (e) => {
+    try {
+      map.setStyle(e.currentTarget.value)
+    } catch (e) {
+      console.log(e)
+    }
+  });
 
   map.on('load', () => {
 
