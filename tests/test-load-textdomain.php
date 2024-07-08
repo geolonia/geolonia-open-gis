@@ -1,73 +1,32 @@
 <?php
-/**
- * Class TestLoadTextdomain
- */
 
-class Test_LoadTextdomain extends WP_UnitTestCase {
-	protected static $user_id;
+class Test_Translation extends WP_UnitTestCase {
 
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$user_id = $factory->user->create(
-			array(
-				'role'   => 'administrator',
-				'locale' => 'ja',
-			)
-		);
-	}
-
-	/**
-	 * @covers ::geolonia_gis_load_textdomain
-	 */
-	public function test_load_textdomain() {
+	public function set_up() {
+		parent::set_up();
 
 		add_filter('locale', function() {
 			return 'ja';
 		});
-		$this->assertTrue( geolonia_gis_load_textdomain() );
+
+		load_plugin_textdomain( 'geolonia-open-gis', false, dirname(dirname( plugin_basename( __FILE__ ) )). '/languages' );
 	}
 
-	/**
-	 * @covers ::geolonia_gis_load_textdomain
-	 */
-	public function test_load_textdomain_by_plugin_locale() {
-		add_filter('plugin_locale', function() {
-			return 'ja';
-		});
-		$this->assertTrue( geolonia_gis_load_textdomain() );
-	}
+	public function test_translation() {
 
-	/**
-	 * @covers ::geolonia_gis_load_textdomain
-	 */
-	public function test_load_textdomain_when_locale_is_english() {
-		add_filter('locale', function() {
-			return 'en_US';
-		});
-		$this->assertFalse( geolonia_gis_load_textdomain() );
-	}
+		$domain = 'geolonia-open-gis';
 
-	/**
-	 * @covers ::geolonia_gis_load_textdomain
-	 */
-	public function test_load_textdomain_plugin_locale_is_english() {
-		add_filter('plugin_locale', function() {
-			return 'en_US';
-		});
-		$this->assertFalse( geolonia_gis_load_textdomain() );
-	}
-
-	/**
-	 * @covers ::geolonia_gis_load_textdomain
-	 */
-	public function test_load_textdomain_user_locale_is_japanese() {
-
-		add_filter('locale', function() {
-			return 'en_US';
-		});
-
-		set_current_screen( 'dashboard' );
-		wp_set_current_user( self::$user_id );
-
-		$this->assertTrue( geolonia_gis_load_textdomain() );
+		$this->assertSame( 'GeoJSON をアップロードしてください', __( 'Upload GeoJSON', $domain ) );
+		$this->assertSame( '座標', __( 'Coordinates', $domain ) );
+		$this->assertSame( '現在の座標を使用する', __( 'Use the current coordinates', $domain ) );
+		$this->assertSame( 'ズーム', __( 'Zoom', $domain ) );
+		$this->assertSame( '現在のズームレベルを使用する', __( 'Use the current zoom level', $domain ) );
+		$this->assertSame( 'スタイル', __( 'Style', $domain ) );
+		$this->assertSame( '地物の数: <span id="num-of-features"></span>', __( 'Number of features: <span id="num-of-features"></span>', $domain ) );
+		$this->assertSame( '標準', __( 'Standard', $domain ) );
+		$this->assertSame( '地理院地図', __( 'GSI', $domain ) );
+		$this->assertSame( '白地図', __( 'Blank Map', $domain ) );
+		$this->assertSame( '地図', __( 'Map', $domain ) );
+		$this->assertSame( '株式会社 Geolonia', __( 'Geolonia Inc.', $domain ) );
 	}
 }
