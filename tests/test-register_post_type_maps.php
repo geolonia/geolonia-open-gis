@@ -5,7 +5,7 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 
-		unregister_post_type( 'maps' );
+		unregister_post_type( 'map' );
 	}
 
 	/**
@@ -13,14 +13,14 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
 	 */
 	public function test_maps_post_type_registered() {
 
-		$this->assertNull( get_post_type_object( 'maps' ) );
+		$this->assertNull( get_post_type_object( 'map' ) );
 
 		register_post_type_maps();
 
-		$maps_object = get_post_type_object( 'maps' );
+		$maps_object = get_post_type_object( 'map' );
 
         $this->assertInstanceOf( 'WP_Post_Type', $maps_object );
-		$this->assertSame( 'maps', $maps_object->name );
+		$this->assertSame( 'map', $maps_object->name );
 	}
 
     /**
@@ -28,14 +28,14 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
      */
     public function test_maps_post_type_options() {
 
-        $this->assertNull( get_post_type_object( 'maps' ) );
+        $this->assertNull( get_post_type_object( 'map' ) );
 
         register_post_type_maps();
 
-        $maps_object = get_post_type_object( 'maps' );
+        $maps_object = get_post_type_object( 'map' );
 
         // labels の設定値を確認
-        $this->assertSame( 'Map', $maps_object->label );
+        $this->assertSame( '地図', $maps_object->label );
 
         // public の設定値を確認
         $this->assertTrue( $maps_object->public );
@@ -50,16 +50,16 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
         $this->assertTrue( $maps_object->show_in_nav_menus );
 
 		// カスタム投稿タイプの supports に title が含まれているか確認
-		$this->assertTrue( post_type_supports( 'maps', 'title' ), 'Title support is enabled' );
+		$this->assertTrue( post_type_supports( 'map', 'title' ), 'Title support is enabled' );
 
 		// カスタム投稿タイプの supports に editor が含まれているか確認
-		$this->assertTrue( post_type_supports( 'maps', 'editor' ), 'Editor support is enabled' );
+		$this->assertTrue( post_type_supports( 'map', 'editor' ), 'Editor support is enabled' );
 
 		// カスタム投稿タイプの supports に author が含まれているか確認
-		$this->assertTrue( post_type_supports( 'maps', 'revisions' ), 'Revisions support is enabled' );
+		$this->assertTrue( post_type_supports( 'map', 'revisions' ), 'Revisions support is enabled' );
 
 		// カスタム投稿タイプの supports に excerpt が含まれているか確認
-		$this->assertTrue( post_type_supports( 'maps', 'excerpt' ), 'Excerpt support is enabled' );
+		$this->assertTrue( post_type_supports( 'map', 'excerpt' ), 'Excerpt support is enabled' );
 
         // archive の設定値を確認
         $this->assertFalse( $maps_object->has_archive );
@@ -68,7 +68,7 @@ class Test_Register_Post_Type_Maps extends WP_UnitTestCase {
         $this->assertSame( array('slug' => 'maps'), $maps_object->rewrite );
 
         // query_var の設定値を確認
-        $this->assertSame( 'maps', $maps_object->query_var );
+        $this->assertSame( 'map', $maps_object->query_var );
 
         // menu_icon の設定値を確認
         $this->assertSame( 'dashicons-location', $maps_object->menu_icon );
