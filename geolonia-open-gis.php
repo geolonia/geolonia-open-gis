@@ -360,24 +360,10 @@ add_filter( 'the_content',	function( $content ) {
 			$style = get_post_meta( get_the_ID(), '_geolonia-gis-style', true );
 		}
 
-		$content = sprintf( '<script id="geojson-%s" type="application/json">%s</script>
-			<div class="geolonia"
-				data-style="%s"
-				data-geojson="#geojson-%s"
-				data-lat="%s"
-				data-lng="%s"
-				data-zoom="%s"
-				data-marker="off"
-				data-hash="on"
-				data-gesture-handling="off"
-				style="min-height: 300px; width: 100%%;"></div>',
+		$content = sprintf( '<script id="geojson-%s" type="application/json">%s</script>',
 			esc_attr( get_the_ID() ),
 			json_encode( json_decode( get_the_content() ) ),
-			esc_attr( $style ),
-			esc_attr( get_the_ID() ),
-			esc_attr( $lat ),
-			esc_attr( $lng ),
-			esc_attr( $zoom ) );
+		);
 	}
 
 	return $content;
