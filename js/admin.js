@@ -93,7 +93,7 @@ if (document.getElementById('geolonia-gis-editor-container')) {
 
     // GeoJSON 以外のファイルがひとつでもあれば拒否
     for (let i = 0; i < e.dataTransfer.items.length; i++) {
-      if (!e.dataTransfer.items[i].type.match(/application\/(geo\+)?json/)) {
+      if (!e.dataTransfer.items[i].type.match(/application\/(vnd\.)?(geo\+)?json/)) {
         document.getElementById('geolonia-uploader').classList.add('alert')
       }
     }
