@@ -45,20 +45,20 @@ function register_post_type_maps() {
 
 function get_geolonia_open_gis_capabilities() {
 	return apply_filters( 'geolonia-open-gis-capabilities', array(
-		'delete_maps' => array( 'editor', 'author', 'contributor' ),
-		'delete_others_maps' => array( 'editor' ),
-		'delete_private_maps' => array( 'editor', 'author' ),
-		'delete_published_maps' => array( 'editor', 'author' ),
-		'edit_maps' => array( 'editor', 'author', 'contributor' ),
-		'edit_others_maps' => array( 'editor' ),
-		'edit_private_maps' => array( 'editor', 'author' ),
-		'edit_published_maps' => array( 'editor', 'author' ),
-		'publish_maps' => array( 'editor', 'author' ),
-		'read_private_maps' => array( 'editor', 'author', 'contributor', 'subscriber' ),
-		'assign_maptags' => array( 'editor', 'author', 'contributor' ),
-		'delete_maptags' => array( 'editor', 'author' ),
-		'edit_maptags' => array( 'editor', 'author' ),
-		'manage_maptags' => array( 'editor' ),
+		'delete_maps' => array( 'administrator', 'editor', 'author', 'contributor' ),
+		'delete_others_maps' => array( 'administrator', 'editor' ),
+		'delete_private_maps' => array( 'administrator', 'editor', 'author' ),
+		'delete_published_maps' => array( 'administrator', 'editor', 'author' ),
+		'edit_maps' => array( 'administrator', 'editor', 'author', 'contributor' ),
+		'edit_others_maps' => array( 'administrator', 'editor' ),
+		'edit_private_maps' => array( 'administrator', 'editor', 'author' ),
+		'edit_published_maps' => array( 'administrator', 'editor', 'author' ),
+		'publish_maps' => array( 'administrator', 'editor', 'author' ),
+		'read_private_maps' => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
+		'assign_maptags' => array( 'administrator', 'editor', 'author', 'contributor' ),
+		'delete_maptags' => array( 'administrator', 'editor', 'author' ),
+		'edit_maptags' => array( 'administrator', 'editor', 'author' ),
+		'manage_maptags' => array( 'administrator', 'editor' ),
 	) );
 }
 
@@ -82,7 +82,6 @@ register_activation_hook( __FILE__, function() {
 
 	flush_rewrite_rules( false );
 } );
-
 
 register_deactivation_hook( __FILE__, function() {
 	$caps = get_geolonia_open_gis_capabilities();
